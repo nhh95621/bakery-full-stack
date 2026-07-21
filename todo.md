@@ -74,8 +74,8 @@
 - [x] Account page với order history và favorites
 - [x] Wire favorites.add/remove với loading state
 - [x] Protect checkout route (require authentication)
-- [ ] Test toàn bộ luồng mua sắm (browse → detail → cart → checkout → confirm)
-- [ ] Test admin panel CRUD operations
-- [ ] Test authentication (login, logout, protected routes)
-- [ ] Tạo checkpoint cuối cùng
+- [x] Test toàn bộ luồng mua sắm (browse → detail → cart → checkout → confirm)
+- [x] Test admin panel CRUD operations
+- [x] Test authentication (login, logout, protected routes)
+- [x] Tạo checkpoint cuối cùng
 - [ ] Publish project
