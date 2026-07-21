@@ -1,25 +1,17 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Checkout from "./pages/Checkout";
 import AdminPanel from "./pages/AdminPanel";
-import { useState } from "react";
-
-interface CartItem {
-  productId: number;
-  name: string;
-  price: number;
-  image: string;
-  size: string;
-  quantity: number;
-}
+import { useCart } from "./contexts/CartContext";
 
 function Router() {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const { items } = useCart();
+  const [, setLocation] = useLocation();
 
   return (
     <Switch>
@@ -28,9 +20,9 @@ function Router() {
       <Route path={"/checkout"}>
         {() => (
           <Checkout
-            items={cart}
+            items={items}
             onBack={() => {
-              window.history.back();
+              setLocation("/");
             }}
           />
         )}

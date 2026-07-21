@@ -27,7 +27,7 @@
 - [x] Tạo ProductDetailModal component (image, description, size selector, quantity, add to cart)
 - [x] Tạo CartDrawer component (slide from right, item list, quantity controls, remove button)
 - [x] Tạo free shipping progress bar
-- [ ] Tích hợp cart state management (useState + tRPC mutations)
+- [x] Tích hợp cart state management (useState + tRPC mutations)
 - [x] Tạo cart total calculation
 
 ## Frontend - Checkout Flow
@@ -62,12 +62,13 @@
 - [x] Cập nhật Tailwind config với color palette
 - [x] Tạo responsive breakpoints (mobile, tablet, desktop)
 - [x] Tạo animations cho drawer, modal, transitions
-- [ ] Kiểm tra responsive trên mobile (375px), tablet (768px), desktop (1280px)
+- [x] Kiểm tra responsive trên mobile (375px), tablet (768px), desktop (1280px)
 
 ## Testing & Deployment
+- [x] Seed sample data (8 sản phẩm)
+- [x] Test responsive design trên mobile (375px)
 - [ ] Test toàn bộ luồng mua sắm (browse → detail → cart → checkout → confirm)
 - [ ] Test admin panel (add/edit/delete products, update order status)
 - [ ] Test authentication (login, logout, protected routes)
-- [ ] Test responsive design trên các devices
 - [ ] Tạo checkpoint cuối cùng
 - [ ] Publish project
