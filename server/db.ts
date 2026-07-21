@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, products, InsertProduct, orders, InsertOrder, orderItems, InsertOrderItem, favorites } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,141 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// ─── Products ────────────────────────────────────────────────────────────
+
+export async function getProducts(category?: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  if (category && category !== "Tất Cả") {
+    return db.select().from(products).where(
+      and(eq(products.active, true), eq(products.category, category as any))
+    );
+  }
+  
+  return db.select().from(products).where(eq(products.active, true));
+}
+
+export async function getProductById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(products).where(eq(products.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createProduct(data: InsertProduct) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(products).values(data);
+  return result;
+}
+
+export async function updateProduct(id: number, data: Partial<InsertProduct>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.update(products).set(data).where(eq(products.id, id));
+  return result;
+}
+
+export async function deleteProduct(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.delete(products).where(eq(products.id, id));
+  return result;
+}
+
+// ─── Orders ───────────────────────────────────────────────────────────────
+
+export async function createOrder(orderData: InsertOrder, items: InsertOrderItem[]) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const orderResult = await db.insert(orders).values(orderData);
+  const orderId = (orderResult as any).insertId || 0;
+  
+  if (items.length > 0 && orderId) {
+    const itemsWithOrderId = items.map(item => ({
+      ...item,
+      orderId: Number(orderId),
+    }));
+    await db.insert(orderItems).values(itemsWithOrderId);
+  }
+  
+  return orderId;
+}
+
+export async function getOrdersByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(orders).where(eq(orders.userId, userId));
+}
+
+export async function getOrderById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(orders).where(eq(orders.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getOrderItems(orderId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+}
+
+export async function updateOrderStatus(orderId: number, status: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return db.update(orders).set({ status: status as any }).where(eq(orders.id, orderId));
+}
+
+export async function getAllOrders() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(orders);
+}
+
+// ─── Favorites ────────────────────────────────────────────────────────────
+
+export async function addFavorite(userId: number, productId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return db.insert(favorites).values({ userId, productId });
+}
+
+export async function removeFavorite(userId: number, productId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return db.delete(favorites).where(
+    and(eq(favorites.userId, userId), eq(favorites.productId, productId))
+  );
+}
+
+export async function getFavoritesByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(favorites).where(eq(favorites.userId, userId));
+}
+
+export async function isFavorited(userId: number, productId: number) {
+  const db = await getDb();
+  if (!db) return false;
+  
+  const result = await db.select().from(favorites).where(
+    and(eq(favorites.userId, userId), eq(favorites.productId, productId))
+  ).limit(1);
+  
+  return result.length > 0;
+}
