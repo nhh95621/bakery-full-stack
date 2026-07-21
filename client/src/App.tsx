@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Checkout from "./pages/Checkout";
 import AdminPanel from "./pages/AdminPanel";
+import Account from "./pages/Account";
 import { useCart } from "./contexts/CartContext";
 
 function Router() {
@@ -17,6 +18,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/admin"} component={AdminPanel} />
+      <Route path={"/account"} component={Account} />
       <Route path={"/checkout"}>
         {() => (
           <Checkout

@@ -38,25 +38,26 @@
 - [ ] Tích hợp orders.list API cho order history
 
 ## Frontend - User Account
-- [ ] Tạo UserAccount page (order history, favorites)
-- [ ] Tạo Favorites page
-- [ ] Tích hợp favorites.list, favorites.add, favorites.remove APIs
-- [ ] Tích hợp auth.me API để lấy user info
+- [x] Tạo Account page (order history, favorites)
+- [x] Hiển thị lịch sử đơn hàng
+- [x] Hiển thị danh sách yêu thích
+- [x] Tích hợp favorites.list, favorites.add, favorites.remove APIs
+- [x] Tích hợp auth.me API để lấy user info
 
 ## Frontend - Admin Panel
 - [x] Tạo AdminPanel page
 - [x] Tạo ProductManagement table (add/edit/delete)
 - [x] Tạo OrderManagement table (status update)
 - [x] Tạo role-based access control (check user.role === 'admin')
-- [ ] Tích hợp products CRUD APIs
-- [ ] Tích hợp orders update status API
+- [x] Tích hợp products CRUD APIs (create, update, delete)
+- [x] Tích hợp orders update status API
 
 ## Authentication & User Features
-- [ ] Tích hợp Manus OAuth login
-- [ ] Tạo login button và logout button
-- [ ] Lưu user info từ OAuth vào database
-- [ ] Tạo useAuth hook để quản lý auth state
-- [ ] Bảo vệ protected routes (checkout, account, admin)
+- [x] Tích hợp Manus OAuth login (useAuth hook sẵn có)
+- [x] Tạo login button và logout button (Header component)
+- [x] Lưu user info từ OAuth vào database (backend sẵn có)
+- [x] Tạo useAuth hook để quản lý auth state (sẵn có)
+- [x] Bảo vệ protected routes (checkout, account, admin)
 
 ## Styling & Responsive Design
 - [x] Cập nhật Tailwind config với color palette
@@ -66,9 +67,12 @@
 
 ## Testing & Deployment
 - [x] Seed sample data (8 sản phẩm)
-- [x] Test responsive design trên mobile (375px)
+- [x] Test responsive design trên mobile (375px), tablet (768px), desktop (1280px)
+- [x] Full page screenshot - trang chủ hiển thị đầy đủ 8 sản phẩm
+- [x] Admin panel hiển thị đầy đủ products table
+- [x] Account page với order history và favorites
 - [ ] Test toàn bộ luồng mua sắm (browse → detail → cart → checkout → confirm)
-- [ ] Test admin panel (add/edit/delete products, update order status)
+- [ ] Test admin panel CRUD operations
 - [ ] Test authentication (login, logout, protected routes)
 - [ ] Tạo checkpoint cuối cùng
 - [ ] Publish project
