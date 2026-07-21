@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, Loader2 } from "lucide-react";
 
 interface CartItem {
   productId: number;
@@ -22,6 +23,20 @@ const FREE_SHIPPING_THRESHOLD = 500000;
 
 export default function CheckoutPage({ items, onBack }: CheckoutPageProps) {
   const [, setLocation] = useLocation();
+  const { user, loading: authLoading } = useAuth({ redirectOnUnauthenticated: true });
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",

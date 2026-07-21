@@ -146,6 +146,7 @@ export default function Home() {
                 tag={product.tag}
                 tagColor={product.tagColor}
                 liked={favoriteIds.includes(product.id)}
+                liking={addFavoriteMutation.isPending || removeFavoriteMutation.isPending}
                 onLike={() => handleToggleFavorite(product.id)}
                 onAddToCart={() => handleAddToCart(product.id)}
                 onViewDetail={() => {}}

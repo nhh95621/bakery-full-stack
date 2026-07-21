@@ -14,6 +14,7 @@ interface ProductCardProps {
   rating: number;
   reviewCount: number;
   liked: boolean;
+  liking?: boolean;
   onLike: (id: number) => void;
   onAddToCart: (id: number) => void;
   onViewDetail: (id: number) => void;
@@ -31,6 +32,7 @@ export default function ProductCard({
   rating,
   reviewCount,
   liked,
+  liking = false,
   onLike,
   onAddToCart,
   onViewDetail,
@@ -74,9 +76,10 @@ export default function ProductCard({
             e.stopPropagation();
             onLike(id);
           }}
+          disabled={liking}
           className={`absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-background/80 backdrop-blur-sm border border-border transition-colors ${
             liked ? "text-rose-500" : "text-muted-foreground hover:text-rose-400"
-          }`}
+          } ${liking ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           <Heart size={14} fill={liked ? "currentColor" : "none"} />
         </button>
