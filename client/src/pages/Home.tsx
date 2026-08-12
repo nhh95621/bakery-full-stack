@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useCart } from "@/contexts/CartContext";
 import Header from "@/components/Header";
@@ -206,9 +206,9 @@ export default function Home() {
               <h4 className="font-semibold mb-4">Liên Kết</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground">
+                  <Link href="/about" className="text-muted-foreground hover:text-foreground">
                     Về Chúng Tôi
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a href="#" className="text-muted-foreground hover:text-foreground">

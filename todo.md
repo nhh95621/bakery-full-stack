@@ -93,4 +93,11 @@
 ## Header Layout Refinement
 - [x] Đưa logo Boulangerie lên hàng riêng phía trên điều hướng và các thao tác Header
 - [x] Kiểm tra responsive desktop, tablet và mobile sau khi chỉnh bố cục (1280px, 768px, 375px)
-- [ ] Lưu checkpoint cho thay đổi Header
+- [x] Lưu checkpoint cho thay đổi Header (version 9ab4639b)
+
+## About Page
+- [x] Xây dựng trang Về Chúng Tôi với câu chuyện thương hiệu và giá trị cốt lõi
+- [x] Thêm các khối nội dung về nguyên liệu, quy trình thủ công và lời mời trải nghiệm
+- [x] Kết nối điều hướng Header đến route Về Chúng Tôi
+- [x] Kiểm tra responsive và TypeScript cho trang mới (desktop 1280px, mobile 375px; pnpm check và pnpm test gồm 6 tests)
+- [ ] Lưu checkpoint cho trang Về Chúng Tôi
