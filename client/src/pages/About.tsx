@@ -35,7 +35,7 @@ export default function About() {
       )}
 
       <main>
-        <section className="relative isolate overflow-hidden border-b border-border bg-[#f4ecdf]">
+        <section className="paper-grain relative isolate overflow-hidden border-b border-border bg-background">
           <div className="pointer-events-none absolute -right-8 -top-24 select-none font-serif text-[23rem] leading-none text-white/45 md:-right-4 md:text-[35rem]">
             B
           </div>
@@ -43,7 +43,7 @@ export default function About() {
 
           <div className="container relative grid min-h-[590px] items-center gap-12 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
             <div className="max-w-2xl">
-              <p className="mb-5 text-xs font-semibold tracking-[0.25em] text-accent">TỪ GIAN BẾP ĐẾN BÀN TIỆC</p>
+              <p className="section-eyebrow mb-5">TỪ GIAN BẾP ĐẾN BÀN TIỆC</p>
               <h2 className="serif-title max-w-xl text-5xl leading-[0.98] md:text-7xl">
                 Nghệ thuật được nướng bằng ký ức.
               </h2>
@@ -62,8 +62,8 @@ export default function About() {
 
             <div className="relative mx-auto w-full max-w-md lg:ml-auto">
               <div className="absolute -left-5 -top-5 h-full w-full border border-foreground/20" />
-              <div className="relative overflow-hidden bg-[#1f1a17] p-7 text-[#f8f2e8] shadow-2xl md:p-10">
-                <p className="text-xs tracking-[0.28em] text-[#d8b478]">BOULANGERIE</p>
+              <div className="relative overflow-hidden bg-primary p-7 text-primary-foreground shadow-2xl md:p-10">
+                <p className="text-xs tracking-[0.28em] text-gold">BOULANGERIE</p>
                 <div className="my-12 border-y border-white/15 py-10 text-center">
                   <span className="serif-title text-8xl leading-none md:text-9xl">B</span>
                   <p className="mt-5 text-sm leading-7 text-white/70">
@@ -72,7 +72,7 @@ export default function About() {
                 </div>
                 <div className="flex items-center justify-between text-xs uppercase tracking-[0.16em] text-white/60">
                   <span>Depuis 2026</span>
-                  <Sparkles size={16} className="text-[#d8b478]" />
+                  <Sparkles size={16} className="text-gold" />
                 </div>
               </div>
             </div>
@@ -81,7 +81,7 @@ export default function About() {
 
         <section id="story" className="container grid gap-12 py-20 md:py-28 lg:grid-cols-[0.78fr_1.22fr] lg:gap-20">
           <div className="lg:sticky lg:top-48 lg:h-fit">
-            <p className="text-xs font-semibold tracking-[0.25em] text-accent">CÂU CHUYỆN</p>
+            <p className="section-eyebrow">CÂU CHUYỆN</p>
             <h2 className="serif-title mt-5 text-4xl leading-tight md:text-5xl">Bắt đầu từ một chiếc bánh rất giản dị.</h2>
           </div>
           <div className="max-w-2xl space-y-8 text-base leading-8 text-muted-foreground md:text-lg">
@@ -100,7 +100,7 @@ export default function About() {
         <section className="border-y border-border bg-muted/35">
           <div className="container py-20 md:py-24">
             <div className="mb-12 max-w-2xl">
-              <p className="text-xs font-semibold tracking-[0.25em] text-accent">ĐIỀU CHÚNG TÔI GÌN GIỮ</p>
+              <p className="section-eyebrow">ĐIỀU CHÚNG TÔI GÌN GIỮ</p>
               <h2 className="serif-title mt-4 text-4xl md:text-5xl">Một trải nghiệm ngọt ngào, có chiều sâu.</h2>
             </div>
             <div className="grid gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
@@ -116,15 +116,15 @@ export default function About() {
         </section>
 
         <section className="container py-20 md:py-28">
-          <div className="relative overflow-hidden bg-[#2a211c] px-7 py-16 text-[#fbf5eb] md:px-14 md:py-20">
+          <div className="relative overflow-hidden bg-primary px-7 py-16 text-primary-foreground md:px-14 md:py-20">
             <div className="pointer-events-none absolute -bottom-32 -right-10 select-none font-serif text-[20rem] leading-none text-white/5">B</div>
             <div className="relative max-w-2xl">
-              <p className="text-xs font-semibold tracking-[0.25em] text-[#d8b478]">DÀNH CHO KHOẢNH KHẮC CỦA BẠN</p>
+              <p className="section-eyebrow text-gold">DÀNH CHO KHOẢNH KHẮC CỦA BẠN</p>
               <h2 className="serif-title mt-5 text-4xl leading-tight md:text-6xl">Một lý do thật đẹp để cùng nhau thưởng thức.</h2>
               <p className="mt-6 max-w-xl leading-8 text-white/70">
                 Ghé thăm bộ sưu tập bánh của chúng tôi để chọn một hương vị dành cho ngày thường, một buổi gặp gỡ, hay một dịp thật đặc biệt.
               </p>
-              <Link href={ABOUT_CTA_PATH} className="mt-9 inline-flex items-center gap-2 border-b border-[#d8b478] pb-2 text-sm font-medium text-[#f2d3a1] transition-colors hover:text-white">
+              <Link href={ABOUT_CTA_PATH} className="mt-9 inline-flex items-center gap-2 border-b border-gold pb-2 text-sm font-medium text-gold transition-colors hover:text-white">
                 Xem các bộ sưu tập <ArrowRight size={16} />
               </Link>
             </div>
@@ -132,28 +132,28 @@ export default function About() {
         </section>
       </main>
 
-      <footer className="border-t border-border bg-muted/30">
+      <footer className="border-t border-primary-foreground/15 bg-[#241711] text-primary-foreground">
         <div className="container py-12">
           <div className="grid gap-8 md:grid-cols-3">
             <div>
               <h3 className="serif-subtitle text-lg">Boulangerie</h3>
-              <p className="mt-4 max-w-sm text-sm leading-6 text-muted-foreground">Bánh ngọt cao cấp được chế biến từ những nguyên liệu tốt nhất.</p>
+              <p className="mt-4 max-w-sm text-sm leading-6 text-primary-foreground/60">Bánh ngọt cao cấp được chế biến từ những nguyên liệu tốt nhất.</p>
             </div>
             <div>
               <h4 className="font-semibold">Liên Kết</h4>
-              <div className="mt-4 flex flex-col gap-2 text-sm text-muted-foreground">
-                <Link href="/" className="transition-colors hover:text-foreground">Trang Chủ</Link>
-                <Link href="/about" className="transition-colors hover:text-foreground">Về Chúng Tôi</Link>
-                <Link href="/#products" className="transition-colors hover:text-foreground">Sản Phẩm</Link>
+              <div className="mt-4 flex flex-col gap-2 text-sm text-primary-foreground/60">
+                <Link href="/" className="transition-colors hover:text-gold">Trang Chủ</Link>
+                <Link href="/about" className="transition-colors hover:text-gold">Về Chúng Tôi</Link>
+                <Link href="/#products" className="transition-colors hover:text-gold">Sản Phẩm</Link>
               </div>
             </div>
             <div>
               <h4 className="font-semibold">Liên Hệ</h4>
-              <p className="mt-4 text-sm text-muted-foreground">hello@boulangerie.com</p>
-              <p className="mt-2 text-sm text-muted-foreground">+84 (0) 123 456 789</p>
+              <p className="mt-4 text-sm text-primary-foreground/60">hello@boulangerie.com</p>
+              <p className="mt-2 text-sm text-primary-foreground/60">+84 (0) 123 456 789</p>
             </div>
           </div>
-          <div className="mt-10 border-t border-border pt-8 text-center text-sm text-muted-foreground">© 2026 Boulangerie. All rights reserved.</div>
+          <div className="mt-10 border-t border-primary-foreground/15 pt-8 text-center text-sm text-primary-foreground/45">© 2026 Boulangerie. All rights reserved.</div>
         </div>
       </footer>
     </div>

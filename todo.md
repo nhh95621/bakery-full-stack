@@ -100,4 +100,12 @@
 - [x] Thêm các khối nội dung về nguyên liệu, quy trình thủ công và lời mời trải nghiệm
 - [x] Kết nối điều hướng Header đến route Về Chúng Tôi
 - [x] Kiểm tra responsive và TypeScript cho trang mới (desktop 1280px, mobile 375px; pnpm check và pnpm test gồm 6 tests)
-- [ ] Lưu checkpoint cho trang Về Chúng Tôi
+- [x] Lưu checkpoint cho trang Về Chúng Tôi (version 025889c2)
+
+## Visual Redesign - Artemis-inspired Direction
+- [x] Phân tích ngôn ngữ thị giác của Artemis Pastry và xác định nguyên tắc có thể áp dụng hợp pháp
+- [x] Thiết lập bảng màu và lớp nền giàu chiều sâu cho Boulangerie
+- [x] Nâng cấp hero, danh mục, product card, Header và các CTA theo thiết kế mới
+- [x] Đồng bộ lại trang Về Chúng Tôi, giỏ hàng và các bề mặt thương hiệu chính
+- [x] Kiểm tra responsive, TypeScript, unit tests và production build (mobile 375px, desktop 1280px; 6 tests pass)
+- [ ] Lưu checkpoint cho bản thiết kế nâng cấp

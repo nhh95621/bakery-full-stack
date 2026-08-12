@@ -45,11 +45,11 @@ function SearchBox({ mobile = false, value, suggestions, onChange, onSelect }: S
         onChange={(event) => onChange(event.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => window.setTimeout(() => setFocused(false), 150)}
-        className="w-full pl-10 pr-4 py-2 border border-border rounded bg-muted text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+        className="w-full border border-border bg-card py-2 pl-10 pr-4 text-sm shadow-sm outline-none transition focus:border-terracotta focus:ring-2 focus:ring-gold/30"
       />
 
       {showSuggestions && (
-        <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-50 overflow-hidden rounded border border-border bg-background shadow-xl">
+        <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-50 overflow-hidden border border-border bg-card shadow-2xl">
           {suggestions.length > 0 ? (
             <div className="py-1">
               {suggestions.map((suggestion) => (
@@ -111,20 +111,22 @@ export default function Header({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-background border-b border-border">
+    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 backdrop-blur-md">
       <div className="container py-3 md:py-4">
-        <div className="flex justify-center border-b border-border pb-3 md:pb-4">
+        <div className="relative flex justify-center border-b border-border pb-3 md:pb-4">
+          <span className="absolute left-0 top-1/2 hidden -translate-y-1/2 text-[9px] font-semibold tracking-[0.18em] text-terracotta lg:block">PÂTISSERIE · SAIGON</span>
+          <span className="absolute right-0 top-1/2 hidden -translate-y-1/2 text-[9px] font-semibold tracking-[0.18em] text-muted-foreground lg:block">MADE SLOWLY</span>
           <Link href="/" className="inline-flex rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
-            <h1 className="serif-title text-2xl tracking-wide md:text-3xl">Boulangerie</h1>
+            <div className="text-center"><p className="mb-1 text-[8px] font-semibold tracking-[0.34em] text-terracotta">MAISON DE PÂTISSERIE</p><h1 className="serif-title text-2xl tracking-[0.08em] md:text-3xl">Boulangerie</h1></div>
           </Link>
         </div>
 
         <div className="flex items-center justify-between gap-4 pt-3 md:pt-4">
           <div className="hidden min-w-0 flex-1 md:flex">
             <nav className="flex gap-6">
-              <Link href="/" className="text-sm hover:text-primary transition-colors">Trang Chủ</Link>
-              <Link href="/#products" className="text-sm hover:text-primary transition-colors">Sản Phẩm</Link>
-              <Link href="/about" className="text-sm hover:text-primary transition-colors">Về Chúng Tôi</Link>
+              <Link href="/" className="text-[11px] font-semibold tracking-[0.08em] uppercase hover:text-terracotta transition-colors">Trang Chủ</Link>
+              <Link href="/#products" className="text-[11px] font-semibold tracking-[0.08em] uppercase hover:text-terracotta transition-colors">Sản Phẩm</Link>
+              <Link href="/about" className="text-[11px] font-semibold tracking-[0.08em] uppercase hover:text-terracotta transition-colors">Về Chúng Tôi</Link>
             </nav>
           </div>
 
@@ -138,7 +140,7 @@ export default function Header({
           </div>
 
           <div className="flex min-w-0 flex-1 items-center justify-end gap-4">
-            <Link href="/favorites" className="relative p-2 hover:bg-muted rounded transition-colors" aria-label="Sản phẩm yêu thích">
+            <Link href="/favorites" className="relative p-2 hover:bg-muted transition-colors" aria-label="Sản phẩm yêu thích">
               <Heart className="w-5 h-5" />
               {favoriteCount > 0 && (
                 <span className="absolute top-0 right-0 w-5 h-5 bg-accent text-accent-foreground text-xs flex items-center justify-center rounded-full">
@@ -147,7 +149,7 @@ export default function Header({
               )}
             </Link>
 
-            <button onClick={onCartClick} className="relative p-2 hover:bg-muted rounded transition-colors" aria-label="Mở giỏ hàng">
+              <button onClick={onCartClick} className="relative p-2 hover:bg-muted transition-colors" aria-label="Mở giỏ hàng">
               <ShoppingBag className="w-5 h-5" />
               {cartCount > 0 && (
                 <span className="absolute top-0 right-0 w-5 h-5 bg-primary text-primary-foreground text-xs font-semibold flex items-center justify-center rounded-full">
@@ -160,19 +162,19 @@ export default function Header({
               {user ? (
                 <>
                   <Link href="/account" className="text-sm hover:text-primary transition-colors px-3 py-2">{user.name || user.email}</Link>
-                  <button onClick={() => logout()} className="p-2 hover:bg-muted rounded transition-colors" aria-label="Đăng xuất">
+                  <button onClick={() => logout()} className="p-2 hover:bg-muted transition-colors" aria-label="Đăng xuất">
                     <LogOut className="w-4 h-4" />
                   </button>
                 </>
               ) : (
-                <button onClick={() => startLogin()} className="p-2 hover:bg-muted rounded transition-colors flex items-center gap-2">
+                <button onClick={() => startLogin()} className="p-2 hover:bg-muted transition-colors flex items-center gap-2">
                   <LogIn className="w-4 h-4" />
                   <span className="text-sm">Đăng Nhập</span>
                 </button>
               )}
             </div>
 
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 hover:bg-muted rounded transition-colors" aria-label="Mở menu">
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 hover:bg-muted transition-colors" aria-label="Mở menu">
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>

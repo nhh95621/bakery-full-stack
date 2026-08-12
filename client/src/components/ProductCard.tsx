@@ -1,6 +1,5 @@
+import { ArrowUpRight, Heart, Plus } from "lucide-react";
 import { useState } from "react";
-import { Heart, Star, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface ProductCardProps {
   id: number;
@@ -20,116 +19,33 @@ interface ProductCardProps {
   onViewDetail: (id: number) => void;
 }
 
-export default function ProductCard({
-  id,
-  name,
-  subtitle,
-  price,
-  originalPrice,
-  image,
-  tag,
-  tagColor,
-  rating,
-  reviewCount,
-  liked,
-  liking = false,
-  onLike,
-  onAddToCart,
-  onViewDetail,
-}: ProductCardProps) {
+export default function ProductCard({ id, name, subtitle, price, originalPrice, image, tag, liked, liking = false, onLike, onAddToCart, onViewDetail }: ProductCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const discountPercent = originalPrice ? Math.round((1 - price / originalPrice) * 100) : 0;
 
   return (
-    <article className="group bg-card border border-border flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      {/* Image */}
-      <div
-        className="relative aspect-square overflow-hidden bg-muted cursor-pointer"
-        onClick={() => onViewDetail(id)}
-      >
-        <img
-          src={image}
-          alt={name}
-          onLoad={() => setImageLoaded(true)}
-          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
-            imageLoaded ? "opacity-100" : "opacity-0"
-          }`}
-        />
-        {!imageLoaded && (
-          <div className="absolute inset-0 bg-muted animate-pulse" />
-        )}
-
-        {/* Tag */}
-        {tag && (
-          <span
-            className={`absolute top-3 left-3 text-[9px] tracking-[0.3em] uppercase px-2.5 py-1 font-semibold ${
-              tagColor || "bg-primary text-primary-foreground"
-            }`}
-          >
-            {tag}
-          </span>
-        )}
-
-        {/* Like Button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onLike(id);
-          }}
-          disabled={liking}
-          className={`absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-background/80 backdrop-blur-sm border border-border transition-colors ${
-            liked ? "text-rose-500" : "text-muted-foreground hover:text-rose-400"
-          } ${liking ? "opacity-50 cursor-not-allowed" : ""}`}
-        >
-          <Heart size={14} fill={liked ? "currentColor" : "none"} />
+    <article className="group flex h-full flex-col bg-card p-3 text-card-foreground shadow-[0_15px_40px_rgba(20,10,5,0.12)] transition-transform duration-300 hover:-translate-y-1">
+      <div className="relative aspect-[4/5] cursor-pointer overflow-hidden bg-[#eadbca]" onClick={() => onViewDetail(id)}>
+        <img src={image} alt={name} onLoad={() => setImageLoaded(true)} className={`h-full w-full object-cover transition duration-700 group-hover:scale-[1.045] ${imageLoaded ? "opacity-100" : "opacity-0"}`} />
+        {!imageLoaded && <div className="absolute inset-0 animate-pulse bg-muted" />}
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/15 via-transparent to-transparent" />
+        {tag && <span className="absolute left-3 top-3 bg-primary px-2.5 py-1 text-[9px] font-semibold tracking-[0.22em] text-primary-foreground">{tag}</span>}
+        {originalPrice && discountPercent > 0 && <span className="absolute bottom-3 left-3 bg-terracotta px-2 py-1 text-[9px] font-semibold tracking-[0.14em] text-white">GIẢM {discountPercent}%</span>}
+        <button type="button" onClick={(event) => { event.stopPropagation(); onLike(id); }} disabled={liking} aria-label={liked ? "Bỏ yêu thích" : "Thêm yêu thích"} className={`absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-primary/15 bg-card/90 backdrop-blur-sm transition-colors ${liked ? "text-rose-500" : "text-primary hover:bg-gold"} ${liking ? "cursor-not-allowed opacity-50" : ""}`}>
+          <Heart size={15} fill={liked ? "currentColor" : "none"} />
         </button>
-
-        {/* Discount Badge */}
-        {originalPrice && discountPercent > 0 && (
-          <span className="absolute bottom-3 left-3 bg-red-600 text-white text-[9px] tracking-wider uppercase px-2 py-0.5 font-semibold">
-            -{discountPercent}%
-          </span>
-        )}
       </div>
 
-      {/* Info */}
-      <div className="p-4 flex flex-col flex-1 gap-2">
-        <div>
-          <p className="text-[9.5px] tracking-[0.3em] uppercase text-muted-foreground">
-            {subtitle}
-          </p>
-          <h3
-            className="text-[16px] leading-snug mt-0.5 cursor-pointer hover:text-primary transition-colors font-serif font-light"
-            onClick={() => onViewDetail(id)}
-          >
-            {name}
-          </h3>
-        </div>
-
-        {/* Rating */}
-        <div className="flex items-center gap-1.5">
-          <Star size={11} fill="currentColor" className="text-accent" />
-          <span className="text-[12px] font-medium">{rating.toFixed(1)}</span>
-          <span className="text-[11px] text-muted-foreground">({reviewCount})</span>
-        </div>
-
-        {/* Price & Add Button */}
-        <div className="flex items-center gap-2 mt-auto pt-2 border-t border-border">
-          <div className="flex-1">
-            <span className="font-semibold text-[14px] text-foreground">
-              {price.toLocaleString("vi-VN")}₫
-            </span>
-            {originalPrice && (
-              <span className="text-[11px] text-muted-foreground line-through ml-1.5">
-                {originalPrice.toLocaleString("vi-VN")}₫
-              </span>
-            )}
+      <div className="flex flex-1 flex-col px-1 pb-1 pt-5">
+        <p className="text-[9px] font-semibold tracking-[0.2em] text-terracotta uppercase">{subtitle}</p>
+        <h3 className="mt-2 cursor-pointer font-serif text-2xl leading-[0.95] tracking-[-0.025em] transition-colors hover:text-terracotta" onClick={() => onViewDetail(id)}>{name}</h3>
+        <div className="mt-6 flex items-end justify-between gap-3 border-t border-border pt-4">
+          <div>
+            <p className="text-lg font-semibold text-primary">{price.toLocaleString("vi-VN")}₫</p>
+            {originalPrice && <p className="mt-1 text-xs text-muted-foreground line-through">{originalPrice.toLocaleString("vi-VN")}₫</p>}
           </div>
-          <button
-            onClick={() => onAddToCart(id)}
-            className="w-8 h-8 bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors flex-shrink-0 active:scale-95"
-          >
-            <Plus size={14} />
+          <button type="button" onClick={() => onAddToCart(id)} className="inline-flex items-center gap-1.5 border border-primary bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-terracotta hover:border-terracotta active:scale-95">
+            <Plus size={14} /> Thêm <ArrowUpRight size={13} />
           </button>
         </div>
       </div>

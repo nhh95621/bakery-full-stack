@@ -68,15 +68,16 @@ export default function CartDrawer({
         aria-hidden="true"
       />
 
-      <div className="w-full max-w-[420px] bg-background flex flex-col shadow-2xl animate-slide-in-right">
-        <div className="flex items-center justify-between px-6 py-5 border-b border-border">
+      <div className="w-full max-w-[440px] bg-background flex flex-col shadow-2xl animate-slide-in-right">
+        <div className="flex items-center justify-between border-b border-primary/10 bg-primary px-6 py-5 text-primary-foreground">
           <div>
-            <h2 className="serif-subtitle text-lg">Giỏ Hàng</h2>
-            <p className="text-xs text-muted-foreground mt-1">{items.length} sản phẩm</p>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.24em] text-gold">Boulangerie</p>
+            <h2 className="serif-subtitle mt-1 text-xl">Giỏ Hàng</h2>
+            <p className="mt-1 text-xs text-primary-foreground/65">{items.length} sản phẩm đã chọn</p>
           </div>
           <button
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground transition-colors p-2"
+            className="p-2 text-primary-foreground/70 transition-colors hover:text-gold"
             aria-label="Đóng giỏ hàng"
           >
             <X size={20} />
@@ -101,13 +102,13 @@ export default function CartDrawer({
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="w-16 h-16 object-cover bg-muted rounded"
+                    className="h-20 w-16 border border-primary/10 object-cover"
                   />
 
                   <div className="flex-1 flex flex-col justify-between min-w-0">
                     <div>
-                      <p className="font-serif text-sm font-medium truncate">{item.name}</p>
-                      <p className="text-xs text-muted-foreground">{item.size}</p>
+                      <p className="font-serif text-sm font-medium leading-tight">{item.name}</p>
+                      <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{item.size}</p>
                     </div>
                     <p className="text-sm font-semibold">
                       {item.price.toLocaleString("vi-VN")}₫
@@ -115,20 +116,20 @@ export default function CartDrawer({
                   </div>
 
                   <div className="flex flex-col items-end justify-between">
-                    <div className="flex items-center border border-border rounded">
+                    <div className="flex items-center border border-primary/15 bg-card">
                       <button
                         onClick={() =>
                           onUpdateQuantity(item.productId, item.size, Math.max(1, item.quantity - 1))
                         }
-                        className="w-6 h-6 flex items-center justify-center hover:bg-muted"
+                        className="flex h-7 w-7 items-center justify-center transition-colors hover:bg-muted"
                         aria-label={`Giảm số lượng ${item.name}`}
                       >
                         <Minus size={12} />
                       </button>
-                      <span className="w-6 text-center text-xs font-medium">{item.quantity}</span>
+                      <span className="w-7 text-center text-xs font-medium">{item.quantity}</span>
                       <button
                         onClick={() => onUpdateQuantity(item.productId, item.size, item.quantity + 1)}
-                        className="w-6 h-6 flex items-center justify-center hover:bg-muted"
+                        className="flex h-7 w-7 items-center justify-center transition-colors hover:bg-muted"
                         aria-label={`Tăng số lượng ${item.name}`}
                       >
                         <Plus size={12} />
@@ -150,7 +151,7 @@ export default function CartDrawer({
         </div>
 
         {items.length > 0 && (
-          <div className="px-6 py-4 border-t border-border bg-muted/30">
+          <div className="border-t border-primary/10 bg-[#efe0ce] px-6 py-5">
             <div className="mb-2">
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-muted-foreground">Miễn phí vận chuyển</span>
@@ -160,15 +161,15 @@ export default function CartDrawer({
                     : `${(FREE_SHIPPING_THRESHOLD - subtotal).toLocaleString("vi-VN")}₫`}
                 </span>
               </div>
-              <div className="w-full h-2 bg-border rounded-full overflow-hidden">
+              <div className="h-1.5 w-full overflow-hidden bg-primary/12">
                 <div
-                  className="h-full bg-accent transition-all duration-300"
+                  className="h-full bg-gold transition-all duration-300"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
             </div>
             {shippingFree ? (
-              <p className="text-xs text-green-700 font-medium">✓ Bạn đã đủ điều kiện miễn phí vận chuyển!</p>
+              <p className="text-xs font-medium text-primary">✓ Bạn đã đủ điều kiện miễn phí vận chuyển!</p>
             ) : (
               <p className="text-xs text-muted-foreground">
                 Mua thêm {(FREE_SHIPPING_THRESHOLD - subtotal).toLocaleString("vi-VN")}₫ để được miễn phí vận chuyển
@@ -178,14 +179,14 @@ export default function CartDrawer({
         )}
 
         {items.length > 0 && (
-          <div className="border-t border-border p-6 space-y-3">
+          <div className="space-y-3 border-t border-primary/10 p-6">
             <div className="space-y-2">
               <label htmlFor="promo-code" className="flex items-center gap-2 text-sm font-medium">
                 <Tag size={15} className="text-accent" />
                 Mã giảm giá
               </label>
               {promoCode ? (
-                <div className="flex items-center justify-between gap-3 rounded border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
+                <div className="flex items-center justify-between gap-3 border border-gold/50 bg-[#f8eedf] px-3 py-2 text-sm text-primary">
                   <span className="flex items-center gap-2 font-medium">
                     <Check size={14} /> {promoCode}
                   </span>
@@ -203,7 +204,7 @@ export default function CartDrawer({
                       if (event.key === "Enter") handleApplyPromo();
                     }}
                     placeholder="Ví dụ: SWEET10"
-                    className="min-w-0 flex-1 rounded border border-border bg-background px-3 py-2 text-sm uppercase focus:outline-none focus:ring-2 focus:ring-accent"
+                    className="min-w-0 flex-1 border border-primary/20 bg-background px-3 py-2 text-sm uppercase focus:outline-none focus:ring-2 focus:ring-gold"
                   />
                   <Button type="button" onClick={handleApplyPromo} className="btn-outline px-4 py-2 text-sm">
                     Áp dụng
@@ -219,7 +220,7 @@ export default function CartDrawer({
             </div>
 
             {discountAmount > 0 && (
-              <div className="flex justify-between text-sm text-green-700">
+              <div className="flex justify-between text-sm text-primary">
                 <span>Giảm giá:</span>
                 <span>-{discountAmount.toLocaleString("vi-VN")}₫</span>
               </div>
@@ -229,14 +230,14 @@ export default function CartDrawer({
               <span className="text-muted-foreground">Vận chuyển:</span>
               <span>
                 {shippingFree ? (
-                  <span className="text-green-700 font-medium">Miễn phí</span>
+                  <span className="font-medium text-primary">Miễn phí</span>
                 ) : (
                   `${shippingCost.toLocaleString("vi-VN")}₫`
                 )}
               </span>
             </div>
 
-            <div className="flex justify-between text-base font-semibold pt-3 border-t border-border">
+            <div className="flex justify-between border-t border-primary/15 pt-4 font-serif text-lg font-semibold">
               <span>Tổng cộng:</span>
               <span>{total.toLocaleString("vi-VN")}₫</span>
             </div>
