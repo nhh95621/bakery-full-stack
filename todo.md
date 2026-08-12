@@ -79,3 +79,13 @@
 - [x] Test authentication (login, logout, protected routes)
 - [x] Tạo checkpoint cuối cùng
 - [ ] Publish project
+
+## Enhancements - Toast, Promo Code & Auto-suggest
+- [x] Thêm toast notification đẹp mắt khi thêm sản phẩm vào giỏ hàng
+- [x] Thêm toast notification khi đánh dấu hoặc bỏ đánh dấu yêu thích
+- [x] Thêm nhập và áp dụng promo code trong CartDrawer
+- [x] Tính lại giảm giá, phí vận chuyển và tổng thanh toán sau khi áp dụng promo code
+- [x] Thêm tìm kiếm auto-suggest trên Header dựa trên sản phẩm hiện có
+- [x] Điều hướng từ gợi ý tìm kiếm đến đúng sản phẩm hoặc lọc danh sách
+- [x] Kiểm thử responsive và kiểm tra TypeScript/build cho các tính năng mới (pnpm check, pnpm test, pnpm build; mobile, tablet, desktop)
+- [ ] Lưu checkpoint sau khi hoàn tất enhancements

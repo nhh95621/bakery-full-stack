@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { toast } from "sonner";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useCart } from "@/contexts/CartContext";
@@ -17,7 +18,8 @@ export default function Home() {
   const [cartOpen, setCartOpen] = useState(false);
 
   // Use global cart context
-  const { items: cart, itemCount, total, addItem, updateQuantity, removeItem } = useCart();
+  const { items: cart, itemCount, addItem, updateQuantity, removeItem } = useCart();
+  const trpcUtils = trpc.useUtils();
 
   // Fetch products
   const { data: products = [], isLoading: productsLoading } = trpc.products.list.useQuery({
@@ -28,6 +30,18 @@ export default function Home() {
   // Fetch user favorites
   const { data: userFavorites = [] } = trpc.favorites.list.useQuery();
   const favoriteIds = useMemo(() => userFavorites.map((f: any) => f.productId), [userFavorites]);
+
+  const searchSuggestions = useMemo(
+    () =>
+      (products as any[]).slice(0, 5).map((product) => ({
+        id: product.id,
+        name: product.name,
+        subtitle: product.subtitle,
+        image: product.imageUrl,
+        price: parseFloat(product.price),
+      })),
+    [products]
+  );
 
   // Add to cart
   const handleAddToCart = (productId: number) => {
@@ -45,11 +59,28 @@ export default function Home() {
       size: defaultSize,
       quantity: 1,
     });
+    toast.success("Đã thêm vào giỏ hàng", {
+      description: `${product.name} · ${parseFloat(product.price).toLocaleString("vi-VN")}₫`,
+    });
   };
 
   // Toggle favorite
-  const addFavoriteMutation = trpc.favorites.add.useMutation();
-  const removeFavoriteMutation = trpc.favorites.remove.useMutation();
+  const addFavoriteMutation = trpc.favorites.add.useMutation({
+    onSuccess: async () => {
+      await trpcUtils.favorites.list.invalidate();
+      toast.success("Đã thêm vào yêu thích", {
+        description: "Bạn có thể xem lại trong tài khoản của mình.",
+      });
+    },
+    onError: (error) => toast.error(error.message || "Không thể thêm sản phẩm vào yêu thích."),
+  });
+  const removeFavoriteMutation = trpc.favorites.remove.useMutation({
+    onSuccess: async () => {
+      await trpcUtils.favorites.list.invalidate();
+      toast.success("Đã bỏ khỏi yêu thích");
+    },
+    onError: (error) => toast.error(error.message || "Không thể cập nhật danh sách yêu thích."),
+  });
 
   const handleToggleFavorite = (productId: number) => {
     if (favoriteIds.includes(productId)) {
@@ -66,6 +97,11 @@ export default function Home() {
         onCartClick={() => setCartOpen(!cartOpen)}
         onSearchChange={setSearchQuery}
         favoriteCount={favoriteIds.length}
+        suggestions={searchSuggestions}
+        onSuggestionSelect={(suggestion) => {
+          setSearchQuery(suggestion.name);
+          document.querySelector("#products")?.scrollIntoView({ behavior: "smooth" });
+        }}
       />
 
       {/* Cart Drawer */}
