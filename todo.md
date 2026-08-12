@@ -136,8 +136,13 @@
 - [x] Thêm chuyển tiếp mượt, tôn trọng reduced-motion, cho kết quả lọc và sắp xếp catalogue
 - [x] Xây dựng gợi ý sản phẩm theo danh mục hàng trong giỏ, loại trừ các sản phẩm đã có
 - [x] Thêm unit tests và kiểm thử responsive cho các tính năng hồ sơ, chuyển tiếp và gợi ý
-- [ ] Lưu checkpoint bàn giao các tính năng cá nhân hoá mới
+- [x] Lưu checkpoint bàn giao các tính năng cá nhân hoá mới (version 280f2941)
 - [x] Rà soát mã hồ sơ và API đánh giá theo chủ tài khoản, gồm quyền truy cập và mọi trạng thái dữ liệu
 - [x] Rà soát reduced-motion cho chuyển tiếp catalogue và các trường hợp biên của thuật toán gợi ý
 - [x] Bổ sung kiểm thử đơn vị cụ thể cho phạm vi hồ sơ và hành vi chuyển tiếp catalogue
 - [x] Bổ sung trạng thái lỗi rõ ràng cho dữ liệu đơn hàng, đánh giá và yêu thích trong hồ sơ
+
+## GitHub Export
+- [x] Kiểm tra quyền truy cập và cấu hình GitHub cho dự án
+- [ ] Xuất mã nguồn checkpoint 280f2941 lên kho GitHub của người dùng
+- [ ] Xác minh remote, nhánh đích và liên kết kho mã sau khi đẩy
