@@ -21,6 +21,7 @@ import {
   isFavorited,
   getFeaturedReviews,
   getPendingReviews,
+  getReviewsByUserId,
   canUserReviewDeliveredOrder,
   hasUserReviewedProduct,
   createVerifiedReview,
@@ -296,6 +297,10 @@ const reviewsRouter = router({
   listFeatured: publicProcedure
     .input(z.object({ limit: z.number().int().min(1).max(12).optional() }).optional())
     .query(({ input }) => getFeaturedReviews(input?.limit ?? 6)),
+
+  listMine: protectedProcedure.query(async ({ ctx }) => {
+    return getReviewsByUserId(ctx.user.id);
+  }),
 
   submit: protectedProcedure
     .input(

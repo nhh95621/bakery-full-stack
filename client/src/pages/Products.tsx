@@ -2,9 +2,11 @@ import { useMemo, useState } from "react";
 import { ArrowDownRight, ArrowUpDown, ArrowUpRight, Loader2, Search, SlidersHorizontal, X } from "lucide-react";
 import { toast } from "sonner";
 import { Link, useLocation } from "wouter";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { trpc } from "@/lib/trpc";
 import { filterAndSortProducts, PRICE_RANGES, SORT_OPTIONS } from "@/lib/catalogue";
 import type { PriceRange, SortOption } from "@/lib/catalogue";
+import { CATALOGUE_MOTION } from "@/lib/catalogueMotion";
 import { useCart } from "@/contexts/CartContext";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
@@ -244,28 +246,40 @@ export default function Products() {
                 ) : visibleProducts.length === 0 ? (
                   <div className="border border-dashed border-foreground/25 bg-card/60 px-6 py-20 text-center"><p className="font-serif text-3xl">Chưa có lựa chọn phù hợp.</p><p className="mt-3 text-sm text-muted-foreground">Thử thay đổi từ khóa hoặc quay về toàn bộ bộ sưu tập.</p><button type="button" onClick={clearFilters} className="mt-7 inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground">Xem toàn bộ <ArrowDownRight size={16} /></button></div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                    {visibleProducts.map((product) => (
-                      <ProductCard
-                        key={product.id}
-                        id={product.id}
-                        name={product.name}
-                        subtitle={product.subtitle || product.category}
-                        price={parseFloat(product.price)}
-                        originalPrice={product.originalPrice ? parseFloat(product.originalPrice) : undefined}
-                        image={productImage(product)}
-                        rating={parseFloat(product.rating || 0)}
-                        reviewCount={product.reviewCount || 0}
-                        tag={product.tag}
-                        tagColor={product.tagColor}
-                        liked={favoriteIds.includes(product.id)}
-                        liking={addFavoriteMutation.isPending || removeFavoriteMutation.isPending}
-                        onLike={(productId) => favoriteIds.includes(productId) ? removeFavoriteMutation.mutate({ productId }) : addFavoriteMutation.mutate({ productId })}
-                        onAddToCart={(productId) => addToCart(productId)}
-                        onViewDetail={(productId) => setDetailProduct(allProducts.find((product) => product.id === productId) || null)}
-                      />
-                    ))}
-                  </div>
+                  <MotionConfig reducedMotion={CATALOGUE_MOTION.reducedMotion}>
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3" aria-live="polite" aria-label="Kết quả catalogue">
+                      <AnimatePresence initial={false} mode="popLayout">
+                        {visibleProducts.map((product, index) => (
+                          <motion.div
+                            key={product.id}
+                            layout="position"
+                            initial={CATALOGUE_MOTION.initial}
+                            animate={CATALOGUE_MOTION.animate}
+                            exit={CATALOGUE_MOTION.exit}
+                            transition={{ duration: CATALOGUE_MOTION.duration, delay: index * CATALOGUE_MOTION.staggerDelay, ease: CATALOGUE_MOTION.ease }}
+                          >
+                            <ProductCard
+                              id={product.id}
+                              name={product.name}
+                              subtitle={product.subtitle || product.category}
+                              price={parseFloat(product.price)}
+                              originalPrice={product.originalPrice ? parseFloat(product.originalPrice) : undefined}
+                              image={productImage(product)}
+                              rating={parseFloat(product.rating || 0)}
+                              reviewCount={product.reviewCount || 0}
+                              tag={product.tag}
+                              tagColor={product.tagColor}
+                              liked={favoriteIds.includes(product.id)}
+                              liking={addFavoriteMutation.isPending || removeFavoriteMutation.isPending}
+                              onLike={(productId) => favoriteIds.includes(productId) ? removeFavoriteMutation.mutate({ productId }) : addFavoriteMutation.mutate({ productId })}
+                              onAddToCart={(productId) => addToCart(productId)}
+                              onViewDetail={(productId) => setDetailProduct(allProducts.find((product) => product.id === productId) || null)}
+                            />
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    </div>
+                  </MotionConfig>
                 )}
               </div>
             </div>

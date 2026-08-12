@@ -213,8 +213,25 @@ export async function removeFavorite(userId: number, productId: number) {
 export async function getFavoritesByUserId(userId: number) {
   const db = await getDb();
   if (!db) return [];
-  
-  return db.select().from(favorites).where(eq(favorites.userId, userId));
+
+  return db
+    .select({
+      id: favorites.id,
+      productId: favorites.productId,
+      createdAt: favorites.createdAt,
+      product: {
+        id: products.id,
+        name: products.name,
+        subtitle: products.subtitle,
+        price: products.price,
+        imageUrl: products.imageUrl,
+        category: products.category,
+        sizes: products.sizes,
+      },
+    })
+    .from(favorites)
+    .innerJoin(products, eq(favorites.productId, products.id))
+    .where(eq(favorites.userId, userId));
 }
 
 export async function isFavorited(userId: number, productId: number) {
@@ -273,6 +290,31 @@ export async function getPendingReviews() {
     .from(customerReviews)
     .innerJoin(products, eq(customerReviews.productId, products.id))
     .where(eq(customerReviews.approved, false))
+    .orderBy(desc(customerReviews.createdAt));
+}
+
+export async function getReviewsByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db
+    .select({
+      id: customerReviews.id,
+      orderId: customerReviews.orderId,
+      productId: customerReviews.productId,
+      rating: customerReviews.rating,
+      title: customerReviews.title,
+      content: customerReviews.content,
+      verifiedPurchase: customerReviews.verifiedPurchase,
+      approved: customerReviews.approved,
+      createdAt: customerReviews.createdAt,
+      updatedAt: customerReviews.updatedAt,
+      productName: products.name,
+      productCategory: products.category,
+    })
+    .from(customerReviews)
+    .innerJoin(products, eq(customerReviews.productId, products.id))
+    .where(eq(customerReviews.userId, userId))
     .orderBy(desc(customerReviews.createdAt));
 }
 

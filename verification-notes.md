@@ -30,3 +30,12 @@ The brand has been moved to a centered standalone row above the navigation, sear
 - Increasing the quantity updates the cart badge to 2, recalculates the subtotal to 500.000₫, and switches shipping to the free-shipping state at the configured threshold.
 - `pnpm check` passed after the catalogue refactor. `pnpm test` passed with 4 test files and 9 tests, including new price-band and sorting coverage. `pnpm build` passed; Vite reported only a non-blocking chunk-size advisory.
 - Final screenshots at 1280px and 375px confirm the verified-reviews empty state, the desktop sidebar/mobile select variants for catalogue controls, and stable single-column product cards on mobile.
+
+## Hồ sơ khách hàng, chuyển tiếp catalogue & gợi ý theo giỏ
+
+- Desktop verification confirms the account area presents private profile metrics, tab navigation, and an empty order state without exposing another account's data.
+- Mobile verification confirms the profile metrics stack cleanly, the tab bar remains horizontally reachable, and the catalogue preserves readable controls with single-column product cards at 375px.
+- Catalogue filtering and sorting now use layout-preserving entry, exit, and repositioning transitions that honour the user's reduced-motion setting.
+- The mini-cart queries the existing catalogue through tRPC and only suggests products excluded from the cart, prioritising the categories already selected by the customer.
+- Interactive browser verification confirms that adding Entremet Vanilla Classic updates the badge to 1 and opens a mini-cart containing the “Dành riêng cho bạn” recommendation section for the selected category.
+- Final verification: the profile renders its customer header, order/review/favourite tabs and empty order state at desktop width; the catalogue retains its editorial grid and controls. TypeScript check, production build, and 14 unit tests pass after adding protected review access and reduced-motion configuration coverage.

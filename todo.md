@@ -128,4 +128,16 @@
 - [x] Bổ sung trạng thái lỗi an toàn cho truy vấn carousel đánh giá
 - [x] Đóng gói quy trình nâng cấp storefront thành kỹ năng tái sử dụng
 - [x] Kiểm tra responsive, TypeScript, unit tests và production build
-- [ ] Lưu checkpoint cho các tính năng mới
+- [x] Lưu checkpoint cho các tính năng mới (version 809c2f57)
+
+## Personal Profile, Catalogue Motion & Cart Recommendations
+- [x] Xây dựng trang hồ sơ khách hàng hiển thị thông tin tài khoản, lịch sử đơn hàng và đánh giá đã gửi
+- [x] Bổ sung API tRPC chỉ dành cho chủ tài khoản để liệt kê đánh giá đã gửi và trạng thái duyệt
+- [x] Thêm chuyển tiếp mượt, tôn trọng reduced-motion, cho kết quả lọc và sắp xếp catalogue
+- [x] Xây dựng gợi ý sản phẩm theo danh mục hàng trong giỏ, loại trừ các sản phẩm đã có
+- [x] Thêm unit tests và kiểm thử responsive cho các tính năng hồ sơ, chuyển tiếp và gợi ý
+- [ ] Lưu checkpoint bàn giao các tính năng cá nhân hoá mới
+- [x] Rà soát mã hồ sơ và API đánh giá theo chủ tài khoản, gồm quyền truy cập và mọi trạng thái dữ liệu
+- [x] Rà soát reduced-motion cho chuyển tiếp catalogue và các trường hợp biên của thuật toán gợi ý
+- [x] Bổ sung kiểm thử đơn vị cụ thể cho phạm vi hồ sơ và hành vi chuyển tiếp catalogue
+- [x] Bổ sung trạng thái lỗi rõ ràng cho dữ liệu đơn hàng, đánh giá và yêu thích trong hồ sơ

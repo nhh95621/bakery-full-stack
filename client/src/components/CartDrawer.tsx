@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { X, Trash2, Plus, Minus, Tag, Check } from "lucide-react";
+import { useMemo } from "react";
+import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { trpc } from "@/lib/trpc";
+import { recommendProducts, type CatalogueProduct } from "@/lib/recommendations";
 
 interface CartItem {
   productId: number;
@@ -33,8 +37,16 @@ export default function CartDrawer({
   onCheckout,
 }: CartDrawerProps) {
   const [promoInput, setPromoInput] = useState("");
-  const { promoCode, discountAmount, applyPromoCode, removePromoCode } = useCart();
+  const { promoCode, discountAmount, applyPromoCode, removePromoCode, addItem } = useCart();
   const drawerRef = useRef<HTMLDivElement>(null);
+  const { data: catalogueProducts = [], isLoading: recommendationsLoading } = trpc.products.list.useQuery(
+    {},
+    { enabled: isOpen && items.length > 0 }
+  );
+  const recommendations = useMemo(
+    () => recommendProducts(catalogueProducts as CatalogueProduct[], items, 3),
+    [catalogueProducts, items]
+  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -99,6 +111,19 @@ export default function CartDrawer({
     toast.success("Đã bỏ mã giảm giá.");
   };
 
+  const handleAddRecommendation = (product: CatalogueProduct) => {
+    const size = product.sizes?.split(",")[0]?.trim() || "Tiêu chuẩn";
+    addItem({
+      productId: product.id,
+      name: product.name,
+      price: Number(product.price),
+      image: product.imageUrl,
+      size,
+      quantity: 1,
+    });
+    toast.success("Đã thêm gợi ý vào giỏ", { description: product.name });
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -134,7 +159,8 @@ export default function CartDrawer({
               </Button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <>
+              <div className="space-y-4">
               {items.map((item) => (
                 <div
                   key={`${item.productId}-${item.size}`}
@@ -187,7 +213,33 @@ export default function CartDrawer({
                   </div>
                 </div>
               ))}
-            </div>
+              </div>
+              <aside className="mt-6 border-t border-primary/10 pt-5" aria-label="Gợi ý sản phẩm theo giỏ hàng">
+              <div className="flex items-center gap-2">
+                <Sparkles size={15} className="text-gold" />
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-terracotta">Dành riêng cho bạn</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">Gợi ý dựa trên dòng bánh bạn đang chọn</p>
+                </div>
+              </div>
+              {recommendationsLoading ? (
+                <div className="mt-4 grid grid-cols-3 gap-3" aria-label="Đang tải gợi ý">
+                  {[0, 1, 2].map((index) => <div key={index} className="h-28 animate-pulse bg-muted" />)}
+                </div>
+              ) : recommendations.length > 0 ? (
+                <div className="mt-4 grid grid-cols-3 gap-3">
+                  {recommendations.map((product) => (
+                    <article key={product.id} className="min-w-0">
+                      <img src={product.imageUrl} alt={product.name} className="aspect-square w-full border border-primary/10 object-cover" />
+                      <p className="mt-2 line-clamp-2 font-serif text-xs leading-4 text-primary">{product.name}</p>
+                      <p className="mt-1 text-[11px] font-semibold text-terracotta">{Number(product.price).toLocaleString("vi-VN")}₫</p>
+                      <button type="button" onClick={() => handleAddRecommendation(product)} className="mt-2 w-full border border-primary/20 px-2 py-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground">Thêm</button>
+                    </article>
+                  ))}
+                </div>
+              ) : null}
+              </aside>
+            </>
           )}
         </div>
 
