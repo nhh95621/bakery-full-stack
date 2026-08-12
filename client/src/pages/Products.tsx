@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
-import { ArrowDownRight, ArrowUpRight, Loader2, Search, X } from "lucide-react";
+import { ArrowDownRight, ArrowUpDown, ArrowUpRight, Loader2, Search, SlidersHorizontal, X } from "lucide-react";
 import { toast } from "sonner";
 import { Link, useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
+import { filterAndSortProducts, PRICE_RANGES, SORT_OPTIONS } from "@/lib/catalogue";
+import type { PriceRange, SortOption } from "@/lib/catalogue";
 import { useCart } from "@/contexts/CartContext";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
@@ -33,6 +35,8 @@ export default function Products() {
   const [, setLocation] = useLocation();
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(() => new URLSearchParams(window.location.search).get("category") || undefined);
   const [searchQuery, setSearchQuery] = useState(() => new URLSearchParams(window.location.search).get("q") || "");
+  const [priceRange, setPriceRange] = useState<PriceRange>("all");
+  const [sortOption, setSortOption] = useState<SortOption>("default");
   const [cartOpen, setCartOpen] = useState(false);
   const [detailProduct, setDetailProduct] = useState<any | null>(null);
   const { items: cart, itemCount, addItem, updateQuantity, removeItem } = useCart();
@@ -44,6 +48,10 @@ export default function Products() {
   });
   const { data: userFavorites = [] } = trpc.favorites.list.useQuery();
   const allProducts = products as any[];
+  const visibleProducts = useMemo(
+    () => filterAndSortProducts(allProducts, priceRange, sortOption),
+    [allProducts, priceRange, sortOption]
+  );
   const favoriteIds = useMemo(() => userFavorites.map((favorite: any) => favorite.productId), [userFavorites]);
   const suggestions = useMemo(
     () => allProducts.slice(0, 5).map((product) => ({
@@ -91,9 +99,11 @@ export default function Products() {
   const clearFilters = () => {
     setSelectedCategory(undefined);
     setSearchQuery("");
+    setPriceRange("all");
+    setSortOption("default");
   };
 
-  const hasActiveFilter = Boolean(selectedCategory || searchQuery);
+  const hasActiveFilter = Boolean(selectedCategory || searchQuery || priceRange !== "all" || sortOption !== "default");
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -182,6 +192,17 @@ export default function Products() {
                       <button key={category.name} type="button" onClick={() => setSelectedCategory(category.name)} className={`flex w-full items-center justify-between border-b border-foreground/15 py-4 text-left text-sm transition-colors ${selectedCategory === category.name ? "font-semibold text-terracotta" : "hover:text-terracotta"}`}><span>{category.name}</span><span className="font-serif text-lg">{category.number}</span></button>
                     ))}
                   </div>
+                  <div className="mt-9 border-t border-foreground/15 pt-6">
+                    <p className="text-[10px] font-semibold tracking-[0.18em] text-muted-foreground">KHOẢNG GIÁ</p>
+                    <div className="mt-3 space-y-1">
+                      {PRICE_RANGES.map((range) => (
+                        <button key={range.value} type="button" onClick={() => setPriceRange(range.value)} className={`flex w-full items-center gap-3 py-2 text-left text-sm transition-colors ${priceRange === range.value ? "font-semibold text-terracotta" : "text-foreground/75 hover:text-terracotta"}`}>
+                          <span className={`h-2 w-2 rounded-full border ${priceRange === range.value ? "border-terracotta bg-terracotta" : "border-foreground/35"}`} />
+                          {range.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                   {hasActiveFilter && <button type="button" onClick={clearFilters} className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-terracotta"><X size={14} /> Xóa bộ lọc</button>}
                 </div>
               </aside>
@@ -195,7 +216,7 @@ export default function Products() {
                 <div className="mb-9 flex flex-col justify-between gap-5 border-b border-foreground/15 pb-5 md:flex-row md:items-end">
                   <div>
                     <p className="section-eyebrow text-terracotta">{selectedCategory || "Tất cả bộ sưu tập"}</p>
-                    <h2 className="mt-2 font-serif text-4xl tracking-[-0.04em] md:text-5xl">{allProducts.length} lựa chọn đang chờ bạn.</h2>
+                    <h2 className="mt-2 font-serif text-4xl tracking-[-0.04em] md:text-5xl">{visibleProducts.length} lựa chọn đang chờ bạn.</h2>
                   </div>
                   <label className="relative block w-full md:max-w-xs">
                     <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -203,13 +224,28 @@ export default function Products() {
                   </label>
                 </div>
 
+                <div className="mb-8 grid gap-3 border-b border-foreground/10 pb-6 sm:grid-cols-2">
+                  <label className="relative block">
+                    <span className="mb-2 flex items-center gap-2 text-[10px] font-semibold tracking-[0.16em] text-muted-foreground"><SlidersHorizontal size={13} /> KHOẢNG GIÁ</span>
+                    <select value={priceRange} onChange={(event) => setPriceRange(event.target.value as PriceRange)} className="w-full appearance-none border border-foreground/20 bg-card px-4 py-3 text-sm outline-none transition-colors focus:border-terracotta">
+                      {PRICE_RANGES.map((range) => <option key={range.value} value={range.value}>{range.label}</option>)}
+                    </select>
+                  </label>
+                  <label className="relative block">
+                    <span className="mb-2 flex items-center gap-2 text-[10px] font-semibold tracking-[0.16em] text-muted-foreground"><ArrowUpDown size={13} /> SẮP XẾP</span>
+                    <select value={sortOption} onChange={(event) => setSortOption(event.target.value as SortOption)} className="w-full appearance-none border border-foreground/20 bg-card px-4 py-3 text-sm outline-none transition-colors focus:border-terracotta">
+                      {SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                    </select>
+                  </label>
+                </div>
+
                 {productsLoading ? (
                   <div className="flex justify-center py-24"><Loader2 className="h-8 w-8 animate-spin text-terracotta" /></div>
-                ) : allProducts.length === 0 ? (
+                ) : visibleProducts.length === 0 ? (
                   <div className="border border-dashed border-foreground/25 bg-card/60 px-6 py-20 text-center"><p className="font-serif text-3xl">Chưa có lựa chọn phù hợp.</p><p className="mt-3 text-sm text-muted-foreground">Thử thay đổi từ khóa hoặc quay về toàn bộ bộ sưu tập.</p><button type="button" onClick={clearFilters} className="mt-7 inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground">Xem toàn bộ <ArrowDownRight size={16} /></button></div>
                 ) : (
                   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                    {allProducts.map((product) => (
+                    {visibleProducts.map((product) => (
                       <ProductCard
                         key={product.id}
                         id={product.id}

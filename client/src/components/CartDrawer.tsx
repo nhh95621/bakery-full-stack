@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { X, Trash2, Plus, Minus, Tag, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,47 @@ export default function CartDrawer({
 }: CartDrawerProps) {
   const [promoInput, setPromoInput] = useState("");
   const { promoCode, discountAmount, applyPromoCode, removePromoCode } = useCart();
+  const drawerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const focusTimer = window.setTimeout(() => drawerRef.current?.focus(), 0);
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (event.key !== "Tab" || !drawerRef.current) return;
+      const focusable = Array.from(
+        drawerRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), [href], select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.clearTimeout(focusTimer);
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shippingFree = subtotal >= FREE_SHIPPING_THRESHOLD;
@@ -68,7 +109,7 @@ export default function CartDrawer({
         aria-hidden="true"
       />
 
-      <div className="w-full max-w-[440px] bg-background flex flex-col shadow-2xl animate-slide-in-right">
+      <div ref={drawerRef} tabIndex={-1} className="flex w-full max-w-[440px] flex-col bg-background shadow-2xl outline-none animate-slide-in-right">
         <div className="flex items-center justify-between border-b border-primary/10 bg-primary px-6 py-5 text-primary-foreground">
           <div>
             <p className="text-[9px] font-semibold uppercase tracking-[0.24em] text-gold">Boulangerie</p>

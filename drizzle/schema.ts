@@ -102,3 +102,26 @@ export const favorites = mysqlTable("favorites", {
 
 export type Favorite = typeof favorites.$inferSelect;
 export type InsertFavorite = typeof favorites.$inferInsert;
+
+/**
+ * Customer reviews are submitted only against a delivered order and are
+ * published only after an administrator approves them. This prevents the
+ * storefront from showing seeded or unverified testimonials.
+ */
+export const customerReviews = mysqlTable("customerReviews", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  orderId: int("orderId").notNull(),
+  productId: int("productId").notNull(),
+  authorName: varchar("authorName", { length: 255 }).notNull(),
+  rating: int("rating").notNull(),
+  title: varchar("title", { length: 160 }),
+  content: text("content").notNull(),
+  verifiedPurchase: boolean("verifiedPurchase").default(true).notNull(),
+  approved: boolean("approved").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CustomerReview = typeof customerReviews.$inferSelect;
+export type InsertCustomerReview = typeof customerReviews.$inferInsert;

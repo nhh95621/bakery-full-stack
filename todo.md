@@ -117,4 +117,15 @@
 - [x] Điều chỉnh Trang chủ thành landing page thương hiệu, không lặp lại catalogue đầy đủ
 - [x] Cập nhật điều hướng và CTA tới Trang Sản Phẩm mới
 - [x] Kiểm tra responsive, TypeScript, unit tests và production build (desktop 1280px, mobile 375px; 6 tests pass)
-- [ ] Lưu checkpoint cho trải nghiệm catalogue mới
+- [x] Lưu checkpoint cho trải nghiệm catalogue mới (version 885cb4c7)
+
+## Catalogue Filters, Verified Reviews & Reusable Skill
+- [x] Rà soát và hoàn thiện mini-cart drawer trượt từ cạnh phải
+- [x] Thêm lọc theo khoảng giá trên Trang Sản Phẩm
+- [x] Thêm sắp xếp theo giá tăng, giá giảm và bán chạy nhất
+- [x] Tạo schema và tRPC API cho đánh giá khách hàng xác thực, không seed dữ liệu giả
+- [x] Tạo carousel đánh giá trên Trang chủ với fallback khi chưa có đánh giá được xác minh
+- [x] Bổ sung trạng thái lỗi an toàn cho truy vấn carousel đánh giá
+- [x] Đóng gói quy trình nâng cấp storefront thành kỹ năng tái sử dụng
+- [x] Kiểm tra responsive, TypeScript, unit tests và production build
+- [ ] Lưu checkpoint cho các tính năng mới

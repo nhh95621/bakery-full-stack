@@ -19,6 +19,12 @@ import {
   removeFavorite,
   getFavoritesByUserId,
   isFavorited,
+  getFeaturedReviews,
+  getPendingReviews,
+  canUserReviewDeliveredOrder,
+  hasUserReviewedProduct,
+  createVerifiedReview,
+  approveReview,
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import type { InsertOrderItem } from "../drizzle/schema";
@@ -282,6 +288,71 @@ const favoritesRouter = router({
       }
 
       return isFavorited(ctx.user.id, input.productId);
+  }),
+});
+
+// ─── Customer Reviews Router ───────────────────────────────────────────────
+const reviewsRouter = router({
+  listFeatured: publicProcedure
+    .input(z.object({ limit: z.number().int().min(1).max(12).optional() }).optional())
+    .query(({ input }) => getFeaturedReviews(input?.limit ?? 6)),
+
+  submit: protectedProcedure
+    .input(
+      z.object({
+        orderId: z.number().int().positive(),
+        productId: z.number().int().positive(),
+        rating: z.number().int().min(1).max(5),
+        title: z.string().trim().min(3).max(160).optional(),
+        content: z.string().trim().min(20).max(1200),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const eligible = await canUserReviewDeliveredOrder(ctx.user.id, input.orderId, input.productId);
+      if (!eligible) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Chỉ đơn hàng đã giao thành công mới có thể để lại đánh giá.",
+        });
+      }
+
+      if (await hasUserReviewedProduct(ctx.user.id, input.orderId, input.productId)) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "Bạn đã đánh giá sản phẩm này cho đơn hàng đã chọn.",
+        });
+      }
+
+      await createVerifiedReview({
+        userId: ctx.user.id,
+        orderId: input.orderId,
+        productId: input.productId,
+        authorName: ctx.user.name?.trim() || "Khách hàng Boulangerie",
+        rating: input.rating,
+        title: input.title,
+        content: input.content,
+        verifiedPurchase: true,
+        approved: false,
+      });
+
+      return { success: true };
+    }),
+
+  listPending: protectedProcedure.query(async ({ ctx }) => {
+    if (ctx.user.role !== "admin") {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Admin only" });
+    }
+    return getPendingReviews();
+  }),
+
+  approve: protectedProcedure
+    .input(z.object({ id: z.number().int().positive() }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Admin only" });
+      }
+      await approveReview(input.id);
+      return { success: true };
     }),
 });
 
@@ -302,6 +373,7 @@ export const appRouter = router({
   products: productsRouter,
   orders: ordersRouter,
   favorites: favoritesRouter,
+  reviews: reviewsRouter,
 });
 
 export type AppRouter = typeof appRouter;

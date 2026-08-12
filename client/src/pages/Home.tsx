@@ -7,6 +7,7 @@ import { useCart } from "@/contexts/CartContext";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import CartDrawer from "@/components/CartDrawer";
+import CustomerReviewsCarousel from "@/components/CustomerReviewsCarousel";
 
 const CATEGORIES = [
   { name: "Entremet", label: "Mousse & tầng vị", number: "01" },
@@ -217,6 +218,8 @@ export default function Home() {
             )}
           </div>
         </section>
+
+        <CustomerReviewsCarousel />
       </main>
 
       <footer className="bg-[#241711] text-primary-foreground">

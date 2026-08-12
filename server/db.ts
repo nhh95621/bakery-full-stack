@@ -1,6 +1,6 @@
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, products, InsertProduct, orders, InsertOrder, orderItems, InsertOrderItem, favorites } from "../drizzle/schema";
+import { InsertUser, users, products, InsertProduct, orders, InsertOrder, orderItems, InsertOrderItem, favorites, customerReviews, InsertCustomerReview } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -226,4 +226,106 @@ export async function isFavorited(userId: number, productId: number) {
   ).limit(1);
   
   return result.length > 0;
+}
+
+// ─── Verified customer reviews ──────────────────────────────────────────────
+
+export async function getFeaturedReviews(limit = 6) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db
+    .select({
+      id: customerReviews.id,
+      authorName: customerReviews.authorName,
+      rating: customerReviews.rating,
+      title: customerReviews.title,
+      content: customerReviews.content,
+      verifiedPurchase: customerReviews.verifiedPurchase,
+      createdAt: customerReviews.createdAt,
+      productName: products.name,
+      productCategory: products.category,
+    })
+    .from(customerReviews)
+    .innerJoin(products, eq(customerReviews.productId, products.id))
+    .where(and(eq(customerReviews.approved, true), eq(customerReviews.verifiedPurchase, true)))
+    .orderBy(desc(customerReviews.createdAt))
+    .limit(limit);
+}
+
+export async function getPendingReviews() {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db
+    .select({
+      id: customerReviews.id,
+      userId: customerReviews.userId,
+      orderId: customerReviews.orderId,
+      productId: customerReviews.productId,
+      authorName: customerReviews.authorName,
+      rating: customerReviews.rating,
+      title: customerReviews.title,
+      content: customerReviews.content,
+      createdAt: customerReviews.createdAt,
+      productName: products.name,
+    })
+    .from(customerReviews)
+    .innerJoin(products, eq(customerReviews.productId, products.id))
+    .where(eq(customerReviews.approved, false))
+    .orderBy(desc(customerReviews.createdAt));
+}
+
+export async function canUserReviewDeliveredOrder(userId: number, orderId: number, productId: number) {
+  const db = await getDb();
+  if (!db) return false;
+
+  const eligibleItem = await db
+    .select({ id: orderItems.id })
+    .from(orderItems)
+    .innerJoin(orders, eq(orderItems.orderId, orders.id))
+    .where(
+      and(
+        eq(orders.id, orderId),
+        eq(orders.userId, userId),
+        eq(orders.status, "delivered"),
+        eq(orderItems.productId, productId)
+      )
+    )
+    .limit(1);
+
+  return eligibleItem.length > 0;
+}
+
+export async function hasUserReviewedProduct(userId: number, orderId: number, productId: number) {
+  const db = await getDb();
+  if (!db) return false;
+
+  const existing = await db
+    .select({ id: customerReviews.id })
+    .from(customerReviews)
+    .where(
+      and(
+        eq(customerReviews.userId, userId),
+        eq(customerReviews.orderId, orderId),
+        eq(customerReviews.productId, productId)
+      )
+    )
+    .limit(1);
+
+  return existing.length > 0;
+}
+
+export async function createVerifiedReview(data: InsertCustomerReview) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return db.insert(customerReviews).values(data);
+}
+
+export async function approveReview(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return db.update(customerReviews).set({ approved: true }).where(eq(customerReviews.id, id));
 }

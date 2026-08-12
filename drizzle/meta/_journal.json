@@ -15,6 +15,13 @@
       "when": 1784619109890,
       "tag": "0001_chemical_norrin_radd",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1786515056178,
+      "tag": "0002_flaky_franklin_storm",
+      "breakpoints": true
     }
   ]
 }

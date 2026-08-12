@@ -20,3 +20,13 @@ The current branch includes toast feedback for cart and favorite actions, promo-
 The brand has been moved to a centered standalone row above the navigation, search, and account actions. On the 1280px desktop view, the logo is visually separated from “Trang Chủ” by a thin divider and the secondary row maintains a balanced left navigation, centered search, and right actions. At 768px, the compact secondary row preserves navigation and action spacing without collision. At 375px, the centered logo remains on its own row while the favorite, cart, and menu controls occupy the next row with sufficient touch spacing.
 
 `pnpm check` completed successfully after the Header markup update.
+
+## Catalogue, Reviews & Mini-cart Enhancement
+
+- Desktop review confirms the homepage renders the verified-reviews fallback without any seeded or fabricated customer content.
+- The product catalogue renders the price-range control and four sorting options on desktop alongside the existing category controls.
+- The mini-cart drawer opens from the right with a modal overlay and correct empty-state messaging. It now also supports Escape-to-close, background scroll locking, and keyboard focus containment.
+- Browser verification confirms adding Entremet Vanilla Classic updates the cart badge to 1 and produces a success toast. The non-empty drawer correctly shows the selected size, quantity controls, removal action, shipping progress, promo input, shipping fee, subtotal, and total of 280.000₫.
+- Increasing the quantity updates the cart badge to 2, recalculates the subtotal to 500.000₫, and switches shipping to the free-shipping state at the configured threshold.
+- `pnpm check` passed after the catalogue refactor. `pnpm test` passed with 4 test files and 9 tests, including new price-band and sorting coverage. `pnpm build` passed; Vite reported only a non-blocking chunk-size advisory.
+- Final screenshots at 1280px and 375px confirm the verified-reviews empty state, the desktop sidebar/mobile select variants for catalogue controls, and stable single-column product cards on mobile.
