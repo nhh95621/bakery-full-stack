@@ -125,7 +125,7 @@ export default function Header({
           <div className="hidden min-w-0 flex-1 md:flex">
             <nav className="flex gap-6">
               <Link href="/" className="text-[11px] font-semibold tracking-[0.08em] uppercase hover:text-terracotta transition-colors">Trang Chủ</Link>
-              <Link href="/#products" className="text-[11px] font-semibold tracking-[0.08em] uppercase hover:text-terracotta transition-colors">Sản Phẩm</Link>
+              <Link href="/products" className="text-[11px] font-semibold tracking-[0.08em] uppercase hover:text-terracotta transition-colors">Sản Phẩm</Link>
               <Link href="/about" className="text-[11px] font-semibold tracking-[0.08em] uppercase hover:text-terracotta transition-colors">Về Chúng Tôi</Link>
             </nav>
           </div>
@@ -184,7 +184,7 @@ export default function Header({
           <div className="md:hidden mt-4 pt-4 border-t border-border space-y-4">
             <nav className="flex flex-col gap-3">
               <Link href="/" className="text-sm hover:text-primary transition-colors">Trang Chủ</Link>
-              <Link href="/#products" className="text-sm hover:text-primary transition-colors">Sản Phẩm</Link>
+              <Link href="/products" className="text-sm hover:text-primary transition-colors">Sản Phẩm</Link>
               <Link href="/about" className="text-sm hover:text-primary transition-colors">Về Chúng Tôi</Link>
             </nav>
 

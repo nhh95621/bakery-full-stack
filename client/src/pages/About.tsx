@@ -144,7 +144,7 @@ export default function About() {
               <div className="mt-4 flex flex-col gap-2 text-sm text-primary-foreground/60">
                 <Link href="/" className="transition-colors hover:text-gold">Trang Chủ</Link>
                 <Link href="/about" className="transition-colors hover:text-gold">Về Chúng Tôi</Link>
-                <Link href="/#products" className="transition-colors hover:text-gold">Sản Phẩm</Link>
+                <Link href="/products" className="transition-colors hover:text-gold">Sản Phẩm</Link>
               </div>
             </div>
             <div>

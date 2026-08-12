@@ -26,32 +26,33 @@ const HERO_VISUAL = "/manus-storage/boulangerie-hero-patisserie_1a4041f8.jpg";
 
 export default function Home() {
   const [, setLocation] = useLocation();
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [headerSearch, setHeaderSearch] = useState("");
   const [cartOpen, setCartOpen] = useState(false);
   const { items: cart, itemCount, addItem, updateQuantity, removeItem } = useCart();
   const trpcUtils = trpc.useUtils();
+  const productListParams = useMemo(() => ({}), []);
 
-  const { data: products = [], isLoading: productsLoading } = trpc.products.list.useQuery({
-    category: selectedCategory,
-    search: searchQuery || undefined,
-  });
+  const { data: products = [], isLoading: productsLoading } = trpc.products.list.useQuery(productListParams);
   const { data: userFavorites = [] } = trpc.favorites.list.useQuery();
   const favoriteIds = useMemo(() => userFavorites.map((favorite: any) => favorite.productId), [userFavorites]);
   const allProducts = products as any[];
   const heroProduct = allProducts[0];
   const productVisual = (product: any) => CATEGORY_VISUALS[product.category] || product.imageUrl;
 
-  const searchSuggestions = useMemo(
-    () => allProducts.slice(0, 5).map((product) => ({
+  const searchSuggestions = useMemo(() => {
+    const normalizedQuery = headerSearch.trim().toLocaleLowerCase("vi-VN");
+    return allProducts
+      .filter((product) => !normalizedQuery || [product.name, product.subtitle, product.category].filter(Boolean).some((value) => String(value).toLocaleLowerCase("vi-VN").includes(normalizedQuery)))
+      .slice(0, 5)
+      .map((product) => ({
       id: product.id,
       name: product.name,
       subtitle: product.subtitle,
       image: productVisual(product),
       price: parseFloat(product.price),
-    })),
-    [allProducts]
-  );
+      }));
+  }, [allProducts, headerSearch]);
+  const featuredProducts = allProducts.slice(0, 3);
 
   const handleAddToCart = (productId: number) => {
     const product = allProducts.find((item) => item.id === productId);
@@ -81,9 +82,8 @@ export default function Home() {
     else addFavoriteMutation.mutate({ productId });
   };
 
-  const selectCategory = (category?: string) => {
-    setSelectedCategory(category);
-    document.querySelector("#products")?.scrollIntoView({ behavior: "smooth" });
+  const goToCatalogue = (category?: string) => {
+    setLocation(category ? `/products?category=${encodeURIComponent(category)}` : "/products");
   };
 
   return (
@@ -91,12 +91,11 @@ export default function Home() {
       <Header
         cartCount={itemCount}
         onCartClick={() => setCartOpen((open) => !open)}
-        onSearchChange={setSearchQuery}
+        onSearchChange={setHeaderSearch}
         favoriteCount={favoriteIds.length}
         suggestions={searchSuggestions}
         onSuggestionSelect={(suggestion) => {
-          setSearchQuery(suggestion.name);
-          document.querySelector("#products")?.scrollIntoView({ behavior: "smooth" });
+          setLocation(`/products?q=${encodeURIComponent(suggestion.name)}`);
         }}
       />
 
@@ -124,7 +123,7 @@ export default function Home() {
               <h1 className="mt-6 font-serif text-[clamp(4.1rem,9vw,8.7rem)] leading-[0.78] tracking-[-0.065em]">Một chút<br />ngọt ngào,<br /><em className="text-gold">rất nhiều</em> ký ức.</h1>
               <p className="mt-9 max-w-md text-base leading-8 text-primary-foreground/70 md:text-lg">Những chiếc bánh được hoàn thiện từng lớp, từ nguyên liệu theo mùa đến nét chấm phá cuối cùng của người thợ.</p>
               <div className="mt-10 flex flex-wrap gap-4">
-                <button type="button" onClick={() => selectCategory()} className="inline-flex items-center gap-3 bg-gold px-5 py-3 text-sm font-semibold text-cocoa transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.97]">
+                <button type="button" onClick={() => goToCatalogue()} className="inline-flex items-center gap-3 bg-gold px-5 py-3 text-sm font-semibold text-cocoa transition-transform duration-200 hover:-translate-y-0.5 active:scale-[0.97]">
                   Khám phá bộ sưu tập <ArrowDownRight size={17} />
                 </button>
                 <Link href="/about" className="inline-flex items-center gap-3 border border-primary-foreground/30 px-5 py-3 text-sm font-medium text-primary-foreground transition-colors hover:border-gold hover:text-gold">
@@ -159,42 +158,42 @@ export default function Home() {
                 <p className="section-eyebrow">Khám phá theo cảm hứng</p>
                 <h2 className="serif-title mt-3 text-3xl md:text-4xl">Bốn chương vị giác</h2>
               </div>
-              <button type="button" onClick={() => selectCategory()} className="inline-flex items-center gap-2 text-sm font-semibold text-foreground underline decoration-gold decoration-2 underline-offset-8">Xem toàn bộ <ArrowDownRight size={16} /></button>
+              <button type="button" onClick={() => goToCatalogue()} className="inline-flex items-center gap-2 text-sm font-semibold text-foreground underline decoration-gold decoration-2 underline-offset-8">Xem toàn bộ <ArrowDownRight size={16} /></button>
             </div>
             <div className="grid gap-px border border-foreground/15 bg-foreground/15 sm:grid-cols-2 lg:grid-cols-4">
               {CATEGORIES.map((category) => (
                 <button
                   key={category.name}
                   type="button"
-                  onClick={() => selectCategory(category.name)}
-                  className={`group min-h-36 bg-[#f8ecdf] p-5 text-left transition-colors duration-200 hover:bg-primary hover:text-primary-foreground ${selectedCategory === category.name ? "bg-primary text-primary-foreground" : ""}`}
+                  onClick={() => goToCatalogue(category.name)}
+                  className="group min-h-36 bg-[#f8ecdf] p-5 text-left transition-colors duration-200 hover:bg-primary hover:text-primary-foreground"
                 >
-                  <span className={`text-xs tracking-[0.2em] ${selectedCategory === category.name ? "text-gold" : "text-terracotta"}`}>{category.number}</span>
+                  <span className="text-xs tracking-[0.2em] text-terracotta group-hover:text-gold">{category.number}</span>
                   <span className="mt-7 block font-serif text-3xl leading-none">{category.name}</span>
-                  <span className={`mt-3 block text-sm ${selectedCategory === category.name ? "text-primary-foreground/65" : "text-muted-foreground"}`}>{category.label}</span>
+                  <span className="mt-3 block text-sm text-muted-foreground group-hover:text-primary-foreground/65">{category.label}</span>
                 </button>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="products" className="bg-primary py-16 text-primary-foreground md:py-24">
+        <section className="bg-primary py-16 text-primary-foreground md:py-24">
           <div className="container">
             <div className="mb-10 flex flex-col gap-6 md:mb-14 md:flex-row md:items-end md:justify-between">
               <div className="max-w-xl">
-                <p className="section-eyebrow text-gold">La carte Boulangerie</p>
-                <h2 className="mt-4 font-serif text-5xl leading-[0.9] tracking-[-0.045em] md:text-6xl">Bộ sưu tập<br />được làm thật kỹ.</h2>
+                <p className="section-eyebrow text-gold">Quelques créations</p>
+                <h2 className="mt-4 font-serif text-5xl leading-[0.9] tracking-[-0.045em] md:text-6xl">Một vài sáng tạo<br />cho hôm nay.</h2>
               </div>
-              <p className="max-w-sm text-sm leading-7 text-primary-foreground/65">Từ chiếc entremet nhiều tầng vị đến những sắc màu theo mùa, mỗi lựa chọn đều có một cá tính riêng.</p>
+              <div className="max-w-sm"><p className="text-sm leading-7 text-primary-foreground/65">Chỉ là một lát cắt nhỏ từ La Carte của chúng tôi. Khám phá đầy đủ khi bạn đã sẵn sàng.</p><Link href="/products" className="mt-6 inline-flex items-center gap-2 border-b border-gold pb-2 text-sm font-semibold text-gold transition-colors hover:text-primary-foreground">Xem Trang Sản Phẩm <ArrowUpRight size={16} /></Link></div>
             </div>
 
             {productsLoading ? (
               <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-gold" /></div>
-            ) : allProducts.length === 0 ? (
+            ) : featuredProducts.length === 0 ? (
               <div className="border border-primary-foreground/15 py-16 text-center text-primary-foreground/65">Không có sản phẩm nào phù hợp với lựa chọn này.</div>
             ) : (
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {allProducts.map((product) => (
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+                {featuredProducts.map((product) => (
                   <ProductCard
                     key={product.id}
                     id={product.id}
@@ -211,7 +210,7 @@ export default function Home() {
                     liking={addFavoriteMutation.isPending || removeFavoriteMutation.isPending}
                     onLike={() => handleToggleFavorite(product.id)}
                     onAddToCart={() => handleAddToCart(product.id)}
-                    onViewDetail={() => undefined}
+                    onViewDetail={() => setLocation(`/products?q=${encodeURIComponent(product.name)}`)}
                   />
                 ))}
               </div>
@@ -232,7 +231,7 @@ export default function Home() {
               <h4 className="text-xs font-semibold tracking-[0.18em] text-gold">KHÁM PHÁ</h4>
               <div className="mt-5 flex flex-col gap-3 text-sm text-primary-foreground/65">
                 <Link href="/" className="transition-colors hover:text-gold">Trang Chủ</Link>
-                <Link href="/#products" className="transition-colors hover:text-gold">Bộ Sưu Tập</Link>
+                <Link href="/products" className="transition-colors hover:text-gold">Sản Phẩm</Link>
                 <Link href="/about" className="transition-colors hover:text-gold">Về Chúng Tôi</Link>
               </div>
             </div>

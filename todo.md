@@ -108,4 +108,13 @@
 - [x] Nâng cấp hero, danh mục, product card, Header và các CTA theo thiết kế mới
 - [x] Đồng bộ lại trang Về Chúng Tôi, giỏ hàng và các bề mặt thương hiệu chính
 - [x] Kiểm tra responsive, TypeScript, unit tests và production build (mobile 375px, desktop 1280px; 6 tests pass)
-- [ ] Lưu checkpoint cho bản thiết kế nâng cấp
+- [x] Lưu checkpoint cho bản thiết kế nâng cấp (version 7bd009d4)
+
+## Dedicated Product Catalogue
+- [x] Phân tích cấu trúc catalogue sản phẩm từ website tham chiếu và xác định nguyên tắc áp dụng
+- [x] Tạo route và Trang Sản Phẩm độc lập với hero catalogue, bộ lọc, tìm kiếm và product grid
+- [x] Kết nối category, tìm kiếm, quick view, giỏ hàng và yêu thích trên Trang Sản Phẩm
+- [x] Điều chỉnh Trang chủ thành landing page thương hiệu, không lặp lại catalogue đầy đủ
+- [x] Cập nhật điều hướng và CTA tới Trang Sản Phẩm mới
+- [x] Kiểm tra responsive, TypeScript, unit tests và production build (desktop 1280px, mobile 375px; 6 tests pass)
+- [ ] Lưu checkpoint cho trải nghiệm catalogue mới
