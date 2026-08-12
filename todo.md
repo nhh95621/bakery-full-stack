@@ -144,5 +144,9 @@
 
 ## GitHub Export
 - [x] Kiểm tra quyền truy cập và cấu hình GitHub cho dự án
-- [ ] Xuất mã nguồn checkpoint 280f2941 lên kho GitHub của người dùng
-- [ ] Xác minh remote, nhánh đích và liên kết kho mã sau khi đẩy
+- [x] Xuất mã nguồn mới nhất, bao gồm checkpoint 280f2941, lên kho GitHub của người dùng
+- [x] Xác minh remote, nhánh đích và liên kết kho mã sau khi đẩy
+- [x] Kết nối kho đích https://github.com/nhh95621/bakery-full-stack và đẩy nhánh main
+- [x] Đẩy lại nhánh main sau khi quyền ghi GitHub được cập nhật
+- [x] Thử xác minh quyền ghi GitHub sau khi người dùng làm mới token
+- [x] Xác minh commit GitHub chứa checkpoint 280f2941 và đồng bộ trạng thái cây làm việc cuối
