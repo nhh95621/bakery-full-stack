@@ -112,13 +112,15 @@ export default function Header({
 
   return (
     <header className="sticky top-0 z-40 bg-background border-b border-border">
-      <div className="container py-4">
-        <div className="flex items-center justify-between gap-4">
-          <Link href="/" className="flex-shrink-0">
-            <h1 className="serif-title text-2xl">Boulangerie</h1>
+      <div className="container py-3 md:py-4">
+        <div className="flex justify-center border-b border-border pb-3 md:pb-4">
+          <Link href="/" className="inline-flex rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+            <h1 className="serif-title text-2xl tracking-wide md:text-3xl">Boulangerie</h1>
           </Link>
+        </div>
 
-          <div className="hidden md:flex items-center gap-8 flex-1">
+        <div className="flex items-center justify-between gap-4 pt-3 md:pt-4">
+          <div className="hidden min-w-0 flex-1 md:flex">
             <nav className="flex gap-6">
               <Link href="/" className="text-sm hover:text-primary transition-colors">Trang Chủ</Link>
               <a href="#products" className="text-sm hover:text-primary transition-colors">Sản Phẩm</a>
@@ -126,7 +128,7 @@ export default function Header({
             </nav>
           </div>
 
-          <div className="hidden lg:flex items-center flex-1">
+          <div className="hidden min-w-0 flex-1 justify-center lg:flex">
             <SearchBox
               value={searchValue}
               suggestions={suggestions}
@@ -135,7 +137,7 @@ export default function Header({
             />
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex min-w-0 flex-1 items-center justify-end gap-4">
             <Link href="/favorites" className="relative p-2 hover:bg-muted rounded transition-colors" aria-label="Sản phẩm yêu thích">
               <Heart className="w-5 h-5" />
               {favoriteCount > 0 && (

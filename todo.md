@@ -78,7 +78,7 @@
 - [x] Test admin panel CRUD operations
 - [x] Test authentication (login, logout, protected routes)
 - [x] Tạo checkpoint cuối cùng
-- [ ] Publish project
+- [x] Chuẩn bị dự án sẵn sàng để publish trong Management UI (người dùng cần nhấp Publish)
 
 ## Enhancements - Toast, Promo Code & Auto-suggest
 - [x] Thêm toast notification đẹp mắt khi thêm sản phẩm vào giỏ hàng
@@ -88,4 +88,9 @@
 - [x] Thêm tìm kiếm auto-suggest trên Header dựa trên sản phẩm hiện có
 - [x] Điều hướng từ gợi ý tìm kiếm đến đúng sản phẩm hoặc lọc danh sách
 - [x] Kiểm thử responsive và kiểm tra TypeScript/build cho các tính năng mới (pnpm check, pnpm test, pnpm build; mobile, tablet, desktop)
-- [ ] Lưu checkpoint sau khi hoàn tất enhancements
+- [x] Lưu checkpoint sau khi hoàn tất enhancements (version 37cab9c4)
+
+## Header Layout Refinement
+- [x] Đưa logo Boulangerie lên hàng riêng phía trên điều hướng và các thao tác Header
+- [x] Kiểm tra responsive desktop, tablet và mobile sau khi chỉnh bố cục (1280px, 768px, 375px)
+- [ ] Lưu checkpoint cho thay đổi Header

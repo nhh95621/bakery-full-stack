@@ -14,3 +14,9 @@ The current branch includes toast feedback for cart and favorite actions, promo-
 - Mobile screenshot at 375px: compact header/menu, hero CTA, wrapped category controls, and single-column product layout render correctly.
 - Fixed missing `index.css` import in `client/src/main.tsx` and updated Tailwind 4 stylesheet loading with `@config` plus `@import "tailwindcss"`.
 - Removed nested anchor markup from `Header.tsx` to eliminate React DOM nesting warnings.
+
+## Header Layout Refinement
+
+The brand has been moved to a centered standalone row above the navigation, search, and account actions. On the 1280px desktop view, the logo is visually separated from “Trang Chủ” by a thin divider and the secondary row maintains a balanced left navigation, centered search, and right actions. At 768px, the compact secondary row preserves navigation and action spacing without collision. At 375px, the centered logo remains on its own row while the favorite, cart, and menu controls occupy the next row with sufficient touch spacing.
+
+`pnpm check` completed successfully after the Header markup update.
