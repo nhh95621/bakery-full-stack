@@ -21,3 +21,5 @@ Giao diện gọi API bằng client tRPC trong `frontend/src/services/trpc.ts`. 
 `frontend/src/components/` chỉ chứa thành phần giao diện tái sử dụng. `frontend/src/pages/` chứa các route. `frontend/src/lib/` chứa logic theo miền nghiệp vụ, trong khi `frontend/src/utils/` là điểm vào cho tiện ích tổng quát. `frontend/src/config/` và `frontend/src/services/` tách cấu hình trình duyệt khỏi kết nối dịch vụ.
 
 Trong backend, `backend/_core/` chứa nền tảng runtime, xác thực và tích hợp hạ tầng; `backend/config/` là biên công khai cho cấu hình ứng dụng; `backend/db.ts` và `backend/routers.ts` chứa logic nghiệp vụ có thể thay đổi theo sản phẩm.
+
+`frontend/` và `backend/` là **hai khối mã ứng dụng duy nhất**. Các thư mục gốc `docs/`, `tests/`, `scripts/` và `.github/` chỉ phục vụ tài liệu, kiểm thử, tự động hoá và cộng tác. `shared/` là lớp hợp đồng nhỏ cho kiểu, hằng số và lỗi được cả hai khối import; đây không phải một ứng dụng thứ ba. Không duy trì các thư mục mã nguồn cũ như `client/` hoặc `server/`.

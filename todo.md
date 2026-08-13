@@ -192,3 +192,11 @@
 - [x] Bổ sung phân trang và nút Tải thêm cho catalogue, giữ tương thích với lọc/sắp xếp/tìm kiếm
 - [x] Bổ sung kiểm thử owner-only trực tiếp cho truy vấn chi tiết đơn hàng, rồi hoàn tất bộ kiểm thử các luồng mới
 - [x] Xác minh TypeScript, tests, build, runtime và responsive; lưu checkpoint rồi đồng bộ GitHub
+
+## Frontend / Backend Structure Cleanup
+- [x] Kiểm kê tệp mã nguồn còn nằm ngoài `frontend/` và `backend/`
+- [x] Di chuyển hoặc loại bỏ scaffold cũ, đồng thời cập nhật mọi import, script và cấu hình liên quan
+- [x] Xác minh build, tests, runtime và tài liệu phản ánh cấu trúc hai khối chuẩn
+- [ ] Lưu checkpoint và đồng bộ cấu trúc mới lên GitHub
+- [ ] Lưu checkpoint riêng cho đợt frontend/backend structure cleanup sau khi xoá `client/` và cập nhật tài liệu
+- [ ] Chạy `git status`, commit các thay đổi cleanup cấu trúc rồi push lên GitHub để đồng bộ trạng thái mới

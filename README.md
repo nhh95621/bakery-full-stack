@@ -39,6 +39,8 @@ pnpm dev
 
 Ứng dụng phát triển chạy qua entrypoint `backend/_core/index.ts`; Vite phục vụ giao diện từ `frontend/`.
 
+> **Quy ước:** toàn bộ mã chạy thuộc một trong hai khối `frontend/` hoặc `backend/`. `shared/` chỉ giữ hợp đồng dùng chung tối thiểu; không dùng các thư mục cũ `client/` hay `server/`.
+
 ## Kiểm tra chất lượng
 
 ```bash
