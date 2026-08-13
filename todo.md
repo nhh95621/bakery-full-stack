@@ -150,3 +150,16 @@
 - [x] Đẩy lại nhánh main sau khi quyền ghi GitHub được cập nhật
 - [x] Thử xác minh quyền ghi GitHub sau khi người dùng làm mới token
 - [x] Xác minh commit GitHub chứa checkpoint 280f2941 và đồng bộ trạng thái cây làm việc cuối
+
+## Source Structure Refactor
+- [x] Lập bản đồ import và cấu hình hiện tại trước khi tách frontend và backend
+- [x] Di chuyển ứng dụng giao diện sang thư mục frontend và cập nhật Vite, TypeScript
+- [x] Di chuyển ứng dụng máy chủ sang thư mục backend và cập nhật entrypoint, imports
+- [x] Khởi động lại development server và xác nhận không còn lỗi Vite/runtime theo đường dẫn client cũ
+- [x] Xác minh backend entrypoint mới khởi động và phục vụ frontend sau tái cấu trúc
+- [x] Phân loại kiểm thử vào tests/frontend và tests/backend, giữ Vitest hoạt động
+- [x] Bổ sung docs, scripts, README, LICENSE và GitHub Actions CI theo cấu trúc mới
+- [x] Xác minh development server, TypeScript, unit tests và production build sau tái cấu trúc
+- [ ] Lưu checkpoint và đồng bộ cấu trúc mới lên GitHub
+- [x] Kiểm tra log development server chỉ sau lần restart cuối để xác nhận không còn lỗi `/src/main.tsx` hoặc tham chiếu `client/` cũ
+- [x] Mở lại `/` và `/products` sau restart rồi xác minh log mới nhất không phát sinh lỗi Vite/pre-transform
