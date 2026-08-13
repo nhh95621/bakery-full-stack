@@ -4,6 +4,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/services/trpc";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle, Loader2 } from "lucide-react";
+import ShopifyCheckoutButton from "@/components/ShopifyCheckoutButton";
 
 interface CartItem {
   productId: number;
@@ -24,19 +25,6 @@ const FREE_SHIPPING_THRESHOLD = 500000;
 export default function CheckoutPage({ items, onBack }: CheckoutPageProps) {
   const [, setLocation] = useLocation();
   const { user, loading: authLoading } = useAuth({ redirectOnUnauthenticated: true });
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null;
-  }
-
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -53,6 +41,18 @@ export default function CheckoutPage({ items, onBack }: CheckoutPageProps) {
   const shippingFree = subtotal >= FREE_SHIPPING_THRESHOLD;
   const shippingCost = shippingFree ? 0 : 30000;
   const total = subtotal + shippingCost;
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -330,6 +330,7 @@ export default function CheckoutPage({ items, onBack }: CheckoutPageProps) {
                 <span>Tổng cộng:</span>
                 <span>{total.toLocaleString("vi-VN")}₫</span>
               </div>
+              <ShopifyCheckoutButton items={items} />
             </div>
           </div>
         </div>

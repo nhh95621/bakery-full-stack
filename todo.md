@@ -180,3 +180,15 @@
 - [x] Lưu bằng chứng log runtime sạch sau restart không còn lỗi `/src/main.tsx` hoặc `frontend/index.html`
 - [x] Thêm kiểm thử tương tác cho loading, error và callback retry của component phản hồi API
 - [x] Lưu checkpoint riêng cho cải tiến API, hồ sơ và catalogue UX
+
+## Order Tracking, Catalogue Pagination & Shopify Checkout
+- [x] Rà soát mô hình đơn hàng, catalogue và checkout hiện có trước khi mở rộng
+- [x] Cấu hình storefront Shopify và rà soát hợp đồng tRPC commerce được cung cấp
+- [x] Hoàn tất đồng bộ toàn catalogue/variant hiện có với Shopify để mọi sản phẩm đều có thể checkout
+- [x] Giữ catalogue và giỏ hàng storefront hiện có, đồng thời map toàn bộ sản phẩm sang Shopify để checkout không giới hạn ở sản phẩm preview
+- [x] Bổ sung kiểm thử và xác minh runtime cho redirect checkout Shopify, mixed cart và lỗi người dùng
+- [x] Xây dựng trang chi tiết đơn hàng có timeline giao nhận trực quan, bảo vệ theo chủ tài khoản
+- [x] Liên kết lịch sử đơn hàng đến trang chi tiết và xử lý loading, lỗi, trạng thái trống
+- [x] Bổ sung phân trang và nút Tải thêm cho catalogue, giữ tương thích với lọc/sắp xếp/tìm kiếm
+- [x] Bổ sung kiểm thử owner-only trực tiếp cho truy vấn chi tiết đơn hàng, rồi hoàn tất bộ kiểm thử các luồng mới
+- [x] Xác minh TypeScript, tests, build, runtime và responsive; lưu checkpoint rồi đồng bộ GitHub

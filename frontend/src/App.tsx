@@ -10,6 +10,7 @@ import About from "./pages/About";
 import Checkout from "./pages/Checkout";
 import AdminPanel from "./pages/AdminPanel";
 import Account from "./pages/Account";
+import OrderDetail from "./pages/OrderDetail";
 import { useCart } from "./contexts/CartContext";
 
 function Router() {
@@ -23,6 +24,7 @@ function Router() {
       <Route path={"/about"} component={About} />
       <Route path={"/admin"} component={AdminPanel} />
       <Route path={"/account"} component={Account} />
+      <Route path={"/account/orders/:id"} component={OrderDetail} />
       <Route path={"/checkout"}>
         {() => (
           <Checkout

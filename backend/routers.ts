@@ -29,6 +29,7 @@ import {
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import type { InsertOrderItem } from "./db/drizzle/schema";
+import { commerceRouter } from "./routers/commerce";
 
 // ─── Products Router ──────────────────────────────────────────────────────
 const productsRouter = router({
@@ -217,10 +218,11 @@ const ordersRouter = router({
       }
 
       const order = await getOrderById(input.id);
-      if (!order || order.userId !== ctx.user.id) {
-        if (ctx.user.role !== "admin") {
-          throw new TRPCError({ code: "FORBIDDEN" });
-        }
+      if (!order) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Order not found" });
+      }
+      if (order.userId !== ctx.user.id && ctx.user.role !== "admin") {
+        throw new TRPCError({ code: "FORBIDDEN" });
       }
 
       const items = await getOrderItems(input.id);
@@ -379,6 +381,7 @@ export const appRouter = router({
   orders: ordersRouter,
   favorites: favoritesRouter,
   reviews: reviewsRouter,
+  commerce: commerceRouter,
 });
 
 export type AppRouter = typeof appRouter;

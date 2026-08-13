@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowDownRight, ArrowUpDown, ArrowUpRight, Loader2, Search, SlidersHorizontal, X } from "lucide-react";
 import { toast } from "sonner";
 import { Link, useLocation } from "wouter";
@@ -7,6 +7,7 @@ import { trpc } from "@/services/trpc";
 import { filterAndSortProducts, PRICE_RANGES, SORT_OPTIONS } from "@/lib/catalogue";
 import type { PriceRange, SortOption } from "@/lib/catalogue";
 import { CATALOGUE_MOTION } from "@/lib/catalogueMotion";
+import { CATALOGUE_PAGE_SIZE, getCataloguePage } from "@/lib/cataloguePagination";
 import { useCart } from "@/contexts/CartContext";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
@@ -42,6 +43,7 @@ export default function Products() {
   const [sortOption, setSortOption] = useState<SortOption>("default");
   const [cartOpen, setCartOpen] = useState(false);
   const [detailProduct, setDetailProduct] = useState<any | null>(null);
+  const [visibleCount, setVisibleCount] = useState(CATALOGUE_PAGE_SIZE);
   const { items: cart, itemCount, addItem, updateQuantity, removeItem } = useCart();
   const trpcUtils = trpc.useUtils();
 
@@ -54,6 +56,14 @@ export default function Products() {
     () => filterAndSortProducts(allProducts, priceRange, sortOption, selectedCategory),
     [allProducts, priceRange, sortOption, selectedCategory]
   );
+  const cataloguePage = useMemo(
+    () => getCataloguePage(visibleProducts, visibleCount),
+    [visibleProducts, visibleCount]
+  );
+
+  useEffect(() => {
+    setVisibleCount(CATALOGUE_PAGE_SIZE);
+  }, [selectedCategory, searchQuery, priceRange, sortOption]);
   const favoriteIds = useMemo(() => userFavorites.map((favorite: any) => favorite.productId), [userFavorites]);
   const suggestions = useMemo(
     () => allProducts.slice(0, 5).map((product) => ({
@@ -251,7 +261,7 @@ export default function Products() {
                   <MotionConfig reducedMotion={CATALOGUE_MOTION.reducedMotion}>
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3" aria-live="polite" aria-label="Kết quả catalogue">
                       <AnimatePresence initial={false} mode="popLayout">
-                        {visibleProducts.map((product, index) => (
+                        {cataloguePage.displayedProducts.map((product, index) => (
                           <motion.div
                             key={product.id}
                             layout="position"
@@ -280,6 +290,10 @@ export default function Products() {
                           </motion.div>
                         ))}
                       </AnimatePresence>
+                    </div>
+                    <div className="mt-10 flex flex-col items-center gap-4 border-t border-foreground/10 pt-7 text-center">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Đang hiển thị {cataloguePage.displayedCount} / {visibleProducts.length} lựa chọn</p>
+                      {cataloguePage.hasMore && <button type="button" onClick={() => setVisibleCount(cataloguePage.nextCount)} className="inline-flex items-center gap-2 border border-primary bg-card px-6 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground">Tải thêm {cataloguePage.nextCount - cataloguePage.displayedCount} lựa chọn <ArrowDownRight size={15} /></button>}
                     </div>
                   </MotionConfig>
                 )}

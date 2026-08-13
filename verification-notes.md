@@ -50,3 +50,14 @@ The brand has been moved to a centered standalone row above the navigation, sear
 - The `ApiFeedback` component now sources its loading labels, retry label and contrast-specific tokens from tested helpers. Account data queries remain disabled while authentication is resolving or no user is authenticated, preventing private profile requests from starting prematurely.
 - After the 02:37 UTC+7 restart, direct browser requests to `/` and `/products` both rendered successfully. The post-restart log slice contains the server-ready marker and subsequent requests, with **no** `ENOENT`, `frontend/index.html`, `/src/main.tsx`, or Vite pre-transform error entries.
 - The component test verifies that `ApiLoading` exposes the active loading context, `ApiError` exposes the error copy and its retry button invokes `onRetry`; the profile retry helper separately verifies that only the query for the active tab is refetched.
+
+## Order Tracking, Catalogue Pagination & Shopify Checkout
+
+- Shopify Storefront API probe trả về 8 sản phẩm Boulangerie cùng biến thể sẵn sàng bán; toàn bộ catalogue local đã có mapping biến thể để checkout Shopify không loại trừ sản phẩm hợp lệ.
+- `pnpm check`, `pnpm test` và `pnpm build` đã đạt sau các thay đổi. Bộ kiểm thử hiện có 15 tệp đạt, 33 kiểm thử đạt và 1 kiểm thử được bỏ qua; production build chỉ có cảnh báo chunk-size không chặn.
+- Ảnh desktop 1280px của `/products` sau restart xác nhận catalogue hiển thị 6/8 sản phẩm ở lượt đầu, dòng tiến trình “Đang hiển thị 6 / 8 lựa chọn” và nút “Tải thêm 2 lựa chọn”.
+- Trang `/account/orders/:id` bổ sung timeline năm giai đoạn, hiển thị trạng thái hiện tại theo đơn, điểm giao, các dòng sản phẩm và tổng thanh toán; helper timeline có kiểm thử cho trạng thái đang giao và đã huỷ.
+- Sau khi phát hiện và sửa lỗi thứ tự hook của `/checkout`, ảnh xác minh mới chỉ còn empty state hợp lệ của giỏ hàng; không còn React error boundary. Ảnh mobile 375px của catalogue giữ đầy đủ lựa chọn đầu tiên, chỉ báo `6 / 8` và nút tải thêm mà không có tràn ngang.
+- Restart lúc 03:54 UTC+7 và lọc riêng log kể từ mốc này không có `ENOENT`, `frontend/index.html`, `/src/main.tsx`, Vite pre-transform, lỗi import Shopify hoặc `Rendered more hooks`. Các lỗi import trước đó chỉ là dòng lịch sử trước restart.
+- Rà soát hợp đồng backend xác nhận `orders.get` là protected procedure, trả `NOT_FOUND` khi không có đơn và trả `FORBIDDEN` khi `order.userId` không khớp chủ tài khoản (trừ vai trò admin). Hồ sơ hiển thị nút “Theo dõi” trỏ đến `/account/orders/:id`, đồng thời chứa loading, lỗi và empty state cho danh sách đơn.
+- Xác minh cuối: `pnpm check`, `pnpm test` và `pnpm build` hoàn tất. Bộ kiểm thử có **16 test files**, **35 tests passed** và **1 skipped**; gồm smoke test Shopify thực tế, mapping checkout toàn catalogue, lỗi Shopify, timeline, phân trang và owner-only của `orders.get`. Build chỉ báo cảnh báo chunk-size không chặn phát hành.
