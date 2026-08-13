@@ -161,7 +161,7 @@
 - [x] Bổ sung docs, scripts, README, LICENSE và GitHub Actions CI theo cấu trúc mới
 - [x] Xác minh development server, TypeScript, unit tests và production build sau tái cấu trúc
 - [x] Lưu checkpoint tái cấu trúc mới (version facc6190) và đồng bộ cấu trúc lên GitHub
-- [ ] Commit thay đổi tái cấu trúc frontend-backend sau checkpoint facc6190 và đẩy lên GitHub
-- [ ] Xác minh remote GitHub chứa commit tái cấu trúc mới nhất trên nhánh main
+- [x] Commit thay đổi tái cấu trúc frontend-backend sau checkpoint facc6190 và đẩy lên GitHub
+- [x] Xác minh remote GitHub chứa commit tái cấu trúc mới nhất trên nhánh main
 - [x] Kiểm tra log development server chỉ sau lần restart cuối để xác nhận không còn lỗi `/src/main.tsx` hoặc tham chiếu `client/` cũ
 - [x] Mở lại `/` và `/products` sau restart rồi xác minh log mới nhất không phát sinh lỗi Vite/pre-transform
