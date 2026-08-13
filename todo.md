@@ -198,5 +198,5 @@
 - [x] Di chuyển hoặc loại bỏ scaffold cũ, đồng thời cập nhật mọi import, script và cấu hình liên quan
 - [x] Xác minh build, tests, runtime và tài liệu phản ánh cấu trúc hai khối chuẩn
 - [ ] Lưu checkpoint và đồng bộ cấu trúc mới lên GitHub
-- [ ] Lưu checkpoint riêng cho đợt frontend/backend structure cleanup sau khi xoá `client/` và cập nhật tài liệu
+- [x] Lưu checkpoint riêng cho đợt frontend/backend structure cleanup sau khi xoá `client/` và cập nhật tài liệu
 - [ ] Chạy `git status`, commit các thay đổi cleanup cấu trúc rồi push lên GitHub để đồng bộ trạng thái mới
