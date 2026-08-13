@@ -165,3 +165,18 @@
 - [x] Xác minh remote GitHub chứa commit tái cấu trúc mới nhất trên nhánh main
 - [x] Kiểm tra log development server chỉ sau lần restart cuối để xác nhận không còn lỗi `/src/main.tsx` hoặc tham chiếu `client/` cũ
 - [x] Mở lại `/` và `/products` sau restart rồi xác minh log mới nhất không phát sinh lỗi Vite/pre-transform
+
+## API Feedback, Profile & Catalogue UX
+- [x] Rà soát các truy vấn và mutation tRPC hiện có để xác định trạng thái tải, lỗi và thử lại còn thiếu
+- [x] Bổ sung loading, error state và retry rõ ràng cho các luồng API storefront chính
+- [x] Hoàn thiện trang hồ sơ với lịch sử đơn hàng của chính tài khoản đăng nhập
+- [x] Hoàn thiện lọc catalogue theo danh mục và khoảng giá, cùng sắp xếp theo giá/phổ biến
+- [x] Bổ sung hoặc cập nhật unit tests cho trạng thái API và logic catalogue
+- [x] Xác minh TypeScript, unit tests, production build và responsive rồi lưu checkpoint
+- [x] Khôi phục entry HTML frontend và xóa lỗi Vite runtime phát sinh sau tái cấu trúc
+- [x] Xác minh và khắc phục nếu trang hồ sơ duy trì trạng thái tải sau khi truy vấn API hoàn tất
+- [x] Chỉ gọi lịch sử đơn hàng, yêu thích và đánh giá sau khi hồ sơ xác thực đã sẵn sàng
+- [x] Thêm kiểm thử cho trạng thái loading, error và retry của phản hồi API, cùng điều kiện chặn truy vấn hồ sơ
+- [x] Lưu bằng chứng log runtime sạch sau restart không còn lỗi `/src/main.tsx` hoặc `frontend/index.html`
+- [x] Thêm kiểm thử tương tác cho loading, error và callback retry của component phản hồi API
+- [x] Lưu checkpoint riêng cho cải tiến API, hồ sơ và catalogue UX

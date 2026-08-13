@@ -12,6 +12,7 @@ import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import ProductDetailModal from "@/components/ProductDetailModal";
 import CartDrawer from "@/components/CartDrawer";
+import { ApiError, ApiLoading } from "@/components/ApiFeedback";
 
 const CATEGORIES = [
   { name: "Entremet", description: "Mousse & tầng vị", number: "01" },
@@ -44,15 +45,14 @@ export default function Products() {
   const { items: cart, itemCount, addItem, updateQuantity, removeItem } = useCart();
   const trpcUtils = trpc.useUtils();
 
-  const { data: products = [], isLoading: productsLoading } = trpc.products.list.useQuery({
-    category: selectedCategory,
+  const { data: products = [], isLoading: productsLoading, isError: productsError, refetch: refetchProducts } = trpc.products.list.useQuery({
     search: searchQuery || undefined,
   });
   const { data: userFavorites = [] } = trpc.favorites.list.useQuery();
   const allProducts = products as any[];
   const visibleProducts = useMemo(
-    () => filterAndSortProducts(allProducts, priceRange, sortOption),
-    [allProducts, priceRange, sortOption]
+    () => filterAndSortProducts(allProducts, priceRange, sortOption, selectedCategory),
+    [allProducts, priceRange, sortOption, selectedCategory]
   );
   const favoriteIds = useMemo(() => userFavorites.map((favorite: any) => favorite.productId), [userFavorites]);
   const suggestions = useMemo(
@@ -189,16 +189,16 @@ export default function Products() {
                   <p className="section-eyebrow">Danh mục</p>
                   <h2 className="mt-3 font-serif text-5xl leading-[0.9] tracking-[-0.05em]">La<br />carte.</h2>
                   <div className="mt-10 border-t border-foreground/15">
-                    <button type="button" onClick={() => setSelectedCategory(undefined)} className={`flex w-full items-center justify-between border-b border-foreground/15 py-4 text-left text-sm transition-colors ${!selectedCategory ? "font-semibold text-terracotta" : "hover:text-terracotta"}`}><span>Tất cả sáng tạo</span><span className="font-serif text-lg">00</span></button>
+                    <button type="button" onClick={() => setSelectedCategory(undefined)} aria-pressed={!selectedCategory} className={`flex w-full items-center justify-between border-b border-foreground/15 py-4 text-left text-sm transition-colors ${!selectedCategory ? "font-semibold text-terracotta" : "hover:text-terracotta"}`}><span>Tất cả sáng tạo</span><span className="font-serif text-lg">00</span></button>
                     {CATEGORIES.map((category) => (
-                      <button key={category.name} type="button" onClick={() => setSelectedCategory(category.name)} className={`flex w-full items-center justify-between border-b border-foreground/15 py-4 text-left text-sm transition-colors ${selectedCategory === category.name ? "font-semibold text-terracotta" : "hover:text-terracotta"}`}><span>{category.name}</span><span className="font-serif text-lg">{category.number}</span></button>
+                      <button key={category.name} type="button" onClick={() => setSelectedCategory(category.name)} aria-pressed={selectedCategory === category.name} className={`flex w-full items-center justify-between border-b border-foreground/15 py-4 text-left text-sm transition-colors ${selectedCategory === category.name ? "font-semibold text-terracotta" : "hover:text-terracotta"}`}><span>{category.name}</span><span className="font-serif text-lg">{category.number}</span></button>
                     ))}
                   </div>
                   <div className="mt-9 border-t border-foreground/15 pt-6">
                     <p className="text-[10px] font-semibold tracking-[0.18em] text-muted-foreground">KHOẢNG GIÁ</p>
                     <div className="mt-3 space-y-1">
                       {PRICE_RANGES.map((range) => (
-                        <button key={range.value} type="button" onClick={() => setPriceRange(range.value)} className={`flex w-full items-center gap-3 py-2 text-left text-sm transition-colors ${priceRange === range.value ? "font-semibold text-terracotta" : "text-foreground/75 hover:text-terracotta"}`}>
+                        <button key={range.value} type="button" onClick={() => setPriceRange(range.value)} aria-pressed={priceRange === range.value} className={`flex w-full items-center gap-3 py-2 text-left text-sm transition-colors ${priceRange === range.value ? "font-semibold text-terracotta" : "text-foreground/75 hover:text-terracotta"}`}>
                           <span className={`h-2 w-2 rounded-full border ${priceRange === range.value ? "border-terracotta bg-terracotta" : "border-foreground/35"}`} />
                           {range.label}
                         </button>
@@ -211,8 +211,8 @@ export default function Products() {
 
               <div>
                 <div className="mb-8 flex gap-2 overflow-x-auto pb-2 lg:hidden">
-                  <button type="button" onClick={() => setSelectedCategory(undefined)} className={`shrink-0 border px-4 py-2 text-xs font-semibold ${!selectedCategory ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}>Tất cả</button>
-                  {CATEGORIES.map((category) => <button key={category.name} type="button" onClick={() => setSelectedCategory(category.name)} className={`shrink-0 border px-4 py-2 text-xs font-semibold ${selectedCategory === category.name ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}>{category.name}</button>)}
+                  <button type="button" onClick={() => setSelectedCategory(undefined)} aria-pressed={!selectedCategory} className={`shrink-0 border px-4 py-2 text-xs font-semibold ${!selectedCategory ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}>Tất cả</button>
+                  {CATEGORIES.map((category) => <button key={category.name} type="button" onClick={() => setSelectedCategory(category.name)} aria-pressed={selectedCategory === category.name} className={`shrink-0 border px-4 py-2 text-xs font-semibold ${selectedCategory === category.name ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}>{category.name}</button>)}
                 </div>
 
                 <div className="mb-9 flex flex-col justify-between gap-5 border-b border-foreground/15 pb-5 md:flex-row md:items-end">
@@ -242,7 +242,9 @@ export default function Products() {
                 </div>
 
                 {productsLoading ? (
-                  <div className="flex justify-center py-24"><Loader2 className="h-8 w-8 animate-spin text-terracotta" /></div>
+                  <ApiLoading label="Đang sắp xếp những sáng tạo phù hợp với bạn" />
+                ) : productsError ? (
+                  <ApiError title="Chưa thể tải catalogue" description="Danh mục có thể đang được làm mới. Vui lòng thử lại để tiếp tục lựa chọn." onRetry={() => void refetchProducts()} />
                 ) : visibleProducts.length === 0 ? (
                   <div className="border border-dashed border-foreground/25 bg-card/60 px-6 py-20 text-center"><p className="font-serif text-3xl">Chưa có lựa chọn phù hợp.</p><p className="mt-3 text-sm text-muted-foreground">Thử thay đổi từ khóa hoặc quay về toàn bộ bộ sưu tập.</p><button type="button" onClick={clearFilters} className="mt-7 inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground">Xem toàn bộ <ArrowDownRight size={16} /></button></div>
                 ) : (

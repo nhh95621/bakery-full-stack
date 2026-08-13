@@ -17,6 +17,7 @@ export type SortOption = (typeof SORT_OPTIONS)[number]["value"];
 
 export interface CatalogueProduct {
   price: number | string;
+  category?: string | null;
   reviewCount?: number | null;
   rating?: number | string | null;
 }
@@ -24,10 +25,13 @@ export interface CatalogueProduct {
 export function filterAndSortProducts<T extends CatalogueProduct>(
   products: readonly T[],
   priceRange: PriceRange,
-  sortOption: SortOption
+  sortOption: SortOption,
+  category?: string
 ): T[] {
   const filtered = products.filter((product) => {
     const price = Number(product.price);
+    const categoryMatches = !category || product.category?.toLocaleLowerCase() === category.toLocaleLowerCase();
+    if (!categoryMatches) return false;
     if (priceRange === "under-200") return price < 200000;
     if (priceRange === "200-500") return price >= 200000 && price <= 500000;
     if (priceRange === "over-500") return price > 500000;

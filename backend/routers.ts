@@ -10,7 +10,7 @@ import {
   updateProduct,
   deleteProduct,
   createOrder,
-  getOrdersByUserId,
+  getOrderHistoryByUserId,
   getOrderById,
   getOrderItems,
   updateOrderStatus,
@@ -205,7 +205,7 @@ const ordersRouter = router({
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
 
-    const orders = await getOrdersByUserId(ctx.user.id);
+    const orders = await getOrderHistoryByUserId(ctx.user.id);
     return orders;
   }),
 

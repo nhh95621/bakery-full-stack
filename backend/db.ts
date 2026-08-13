@@ -163,6 +163,19 @@ export async function getOrdersByUserId(userId: number) {
   return db.select().from(orders).where(eq(orders.userId, userId));
 }
 
+/** Returns a customer's orders with their immutable purchase-line snapshots. */
+export async function getOrderHistoryByUserId(userId: number) {
+  const customerOrders = await getOrdersByUserId(userId);
+  const history = await Promise.all(
+    customerOrders.map(async (order) => ({
+      ...order,
+      items: await getOrderItems(order.id),
+    }))
+  );
+
+  return history.sort((left, right) => right.createdAt.getTime() - left.createdAt.getTime());
+}
+
 export async function getOrderById(id: number) {
   const db = await getDb();
   if (!db) return undefined;

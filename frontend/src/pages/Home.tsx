@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ArrowDownRight, ArrowUpRight, Loader2 } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { toast } from "sonner";
 import { Link, useLocation } from "wouter";
 import { trpc } from "@/services/trpc";
@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import CartDrawer from "@/components/CartDrawer";
 import CustomerReviewsCarousel from "@/components/CustomerReviewsCarousel";
+import { ApiError, ApiLoading } from "@/components/ApiFeedback";
 
 const CATEGORIES = [
   { name: "Entremet", label: "Mousse & tầng vị", number: "01" },
@@ -33,7 +34,7 @@ export default function Home() {
   const trpcUtils = trpc.useUtils();
   const productListParams = useMemo(() => ({}), []);
 
-  const { data: products = [], isLoading: productsLoading } = trpc.products.list.useQuery(productListParams);
+  const { data: products = [], isLoading: productsLoading, isError: productsError, refetch: refetchProducts } = trpc.products.list.useQuery(productListParams);
   const { data: userFavorites = [] } = trpc.favorites.list.useQuery();
   const favoriteIds = useMemo(() => userFavorites.map((favorite: any) => favorite.productId), [userFavorites]);
   const allProducts = products as any[];
@@ -189,7 +190,9 @@ export default function Home() {
             </div>
 
             {productsLoading ? (
-              <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-gold" /></div>
+              <ApiLoading tone="dark" label="Đang chuẩn bị những sáng tạo trong ngày" />
+            ) : productsError ? (
+              <ApiError tone="dark" title="Chưa thể tải bộ sưu tập" description="Hãy thử lại để xem những sáng tạo đang sẵn sàng phục vụ hôm nay." onRetry={() => void refetchProducts()} />
             ) : featuredProducts.length === 0 ? (
               <div className="border border-primary-foreground/15 py-16 text-center text-primary-foreground/65">Không có sản phẩm nào phù hợp với lựa chọn này.</div>
             ) : (

@@ -2,10 +2,10 @@ import { describe, expect, it } from "vitest";
 import { filterAndSortProducts } from "../../../frontend/src/lib/catalogue";
 
 const products = [
-  { id: 1, price: "150000", reviewCount: 7, rating: "4.7" },
-  { id: 2, price: "200000", reviewCount: 12, rating: "4.6" },
-  { id: 3, price: "500000", reviewCount: 12, rating: "4.9" },
-  { id: 4, price: "650000", reviewCount: 2, rating: "5" },
+  { id: 1, category: "Macaron", price: "150000", reviewCount: 7, rating: "4.7" },
+  { id: 2, category: "Tart", price: "200000", reviewCount: 12, rating: "4.6" },
+  { id: 3, category: "Tart", price: "500000", reviewCount: 12, rating: "4.9" },
+  { id: 4, category: "Entremet", price: "650000", reviewCount: 2, rating: "5" },
 ];
 
 describe("filterAndSortProducts", () => {
@@ -23,5 +23,10 @@ describe("filterAndSortProducts", () => {
 
   it("uses review count then rating for the popularity ordering", () => {
     expect(filterAndSortProducts(products, "all", "popular").map((product) => product.id)).toEqual([3, 2, 1, 4]);
+  });
+
+  it("filters the locally loaded catalogue by category before applying the price band", () => {
+    expect(filterAndSortProducts(products, "200-500", "price-desc", "tart").map((product) => product.id)).toEqual([3, 2]);
+    expect(filterAndSortProducts(products, "over-500", "default", "Tart")).toEqual([]);
   });
 });
